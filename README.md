@@ -3,12 +3,14 @@ Fire-1099 helps you generate 1099 tax filings formatted for the IRS electronic f
 
 A lot of small companies don't realize they have to file 1099s for most payments to lawyers, as well as independent contractors. The IRS has a system called "FIRE" for electronically submitting these filings, and others like stock options exercise forms. These filings can *only* be filed through this system. If you're used to modern REST APIs, you'll probably find FIRE hard to use. It's inflexible, has an ambiguous spec, and operates on the byte (ASCII code) level. 
 
-With fire-1099, you simply enter your form data in a JSON file [like this one](http://www.github.com) and run it through the program. It validates your data against the IRS spec, auto-formats it where possible, and writes it to a file that can be uploaded straight to FIRE.
+With fire-1099, you simply enter your form data in a JSON file [like this one](https://github.com/djeserkare/fire-1099/blob/master/spec/data/valid_minimal.json) and run it through the program. It validates your data against the IRS spec, auto-formats it where possible, and writes it to a file that can be uploaded straight to FIRE.
 
 I should point out getting access to the FIRE system is non-trivial; it can take a couple of weeks. See below for a link to the form needed.
 
 # Using fire-1099
-The CLI for generating FIRE-formatted files accepts two basic parameters: an input file path and an output file path.
+To install the fire-1099 CLI, clone this repository and run the following command from the repository root directory: `pip install .`
+
+The CLI for generating FIRE-formatted files accepts two basic parameters: an input file path and an (optional) output file path.
 
 
 `fire-1099 path/to/input-file.json --output path/to/output-file.ascii`
@@ -58,7 +60,7 @@ write_1099_file(ascii_string, output_path)
 # Access via IRS FIRE System
 A few things need to happen before you can submit an output file to the IRS:
 
-* You need a *Transmitter Control Code* or "TCC." To get one, you unfortunately have to mail or fax [this form](https://www.irs.gov/pub/irs-pdf/f4419.pdf). 
+* You need a *Transmitter Control Code* or "TCC." To get one, you unfortunately have to mail or fax [this form](https://www.irs.gov/pub/irs-pdf/f4419.pdf). It can take a couple weeks to get a response.
 * You need to have a valid business tax identification code (EIN/TIN). This will be linked to your TCC, and is what you'll use for the "transmitter" record in your FIRE submissions.
 
 # Future Work
