@@ -22,10 +22,10 @@ array.
 _END_OF_PAYER_TRANSFORMS = {
     "record_type":
         ("C", 1, "\x00", lambda x: (x)),
-    "blank_1":
-        ("", 6, "\x00", lambda x: (x)),
     "number_of_payees":
         ("", 8, "0", lambda x: (x)),
+    "blank_1":
+        ("", 6, "\x00", lambda x: (x)),
     "payment_amount_1":
         (18*"0", 18, "0", lambda x: rjust_zero(x, 18)),
     "payment_amount_2":
