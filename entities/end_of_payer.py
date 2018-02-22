@@ -13,11 +13,6 @@ Stores metadata associated with each field in a Transmitter record.
 Values in key-value pairs represent metadata in the following format:
 
 (default value, length, fill character, transformation function)
-
-WARNING
-------- 
-any edits to the keys or key names must be reflected in the SORT 
-array.
 """
 _END_OF_PAYER_TRANSFORMS_ARR = [
     ("record_type", "C", 1, "\x00", lambda x: (x)),

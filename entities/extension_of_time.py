@@ -4,7 +4,7 @@ Representation of a "extension_of_time" record, including transformation
 functions and support functions for conversion into different formats.
 """
 from translator.util import digits_only, uppercase
-from translator.util import xform_entity, fire_entity
+from translator.util import xform_entity, fire_entity, transform_dict
 
 """
 EXTENSION_OF_TIME_TRANSFORMS
@@ -13,11 +13,6 @@ Stores metadata associated with each field in an Extension of Time record.
 Values in key-value pairs represent metadata in the following format:
 
 (default value, length, fill character, transformation function)
-
-WARNING
-------- 
-any edits to the keys or key names must be reflected in the SORT 
-array.
 """
 EXTENSION_OF_TIME_TRANSFORMS = {
     "transmitter_control_code":

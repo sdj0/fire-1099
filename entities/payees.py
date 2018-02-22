@@ -15,11 +15,6 @@ Stores metadata associated with each field in a Transmitter record.
 Values in key-value pairs represent metadata in the following format:
 
 (default value, length, fill character, transformation function)
-
-WARNING
--------
-any edits to the keys or key names must be reflected in the SORT
-array.
 """
 _PAYEE_TRANSFORMS_ARR = [
     ("record_type","B",1,"\x00",lambda x: (x)),
