@@ -4,7 +4,7 @@ Representation of a "payer" record, including transformation functions
 and support functions for conversion into different formats.
 """
 from translator.util import digits_only, uppercase, rjust_zero
-from translator.util import xform_entity, fire_entity
+from translator.util import xform_entity, fire_entity, transform_dict
 
 """
 _PAYER_TRANSFORMS
@@ -19,64 +19,33 @@ WARNING
 any edits to the keys or key names must be reflected in the SORT 
 array.
 """
-_PAYER_TRANSFORMS = {
-    "record_type":
-        ("A", 1, "\x00", lambda x: x),
-    "payment_year":
-        ("", 4, "\x00", lambda x: digits_only(x)),
-    "combined_fed_state":
-        ("", 1, "\x00", lambda x: x),
-    "blank_1":
-        ("", 5, "\x00", lambda x: x),
-    "payer_tin":
-        ("", 9, "\x00", lambda x: digits_only(x)),
-    "payer_name_control":
-        ("", 4, "\x00", lambda x: uppercase(x)),
-    "last_filing_indicator":
-        ("", 1, "\x00", lambda x: x),
-    "type_of_return":
-        ("A", 2, "\x00", lambda x: uppercase(x)),
-    "amount_codes":
-        ("7", 16, "\x00", lambda x: x),
-    "blank_2":
-        ("", 8, "\x00", lambda x: x),
-    "foreign_entity_indicator":
-        ("", 1, "\x00", lambda x: x),
-    "first_payer_name":
-        ("", 40, "\x00", lambda x: uppercase(x)),
-    "second_payer_name":
-        ("", 40, "\x00", lambda x: uppercase(x)),
-    "transfer_agent_control":
-        ("0", 1, "\x00", lambda x: x),
-    "payer_shipping_address":
-        ("", 40, "\x00", lambda x: uppercase(x)),
-    "payer_city":
-        ("", 40, "\x00", lambda x: uppercase(x)),
-    "payer_state":
-        ("", 2, "\x00", lambda x: uppercase(x)),
-    "payer_zip_code":
-        ("", 9, "\x00", lambda x: digits_only(x)),
-    "payer_telephone_number_and_ext":
-        ("", 15, "\x00", lambda x: digits_only(x)),
-    "blank_3":
-        ("", 260, "\x00", lambda x: x),
-    "record_sequence_number":
-        ("00000002", 8, "\x00", lambda x: rjust_zero(x, 8)),
-    "blank_4":
-        ("", 241, "\x00", lambda x: x),
-    "blank_5":
-        ("", 2, "\x00", lambda x: x)
-}
-
-_PAYER_SORT = [
-    "record_type", "payment_year", "combined_fed_state", "blank_1",
-    "payer_tin", "payer_name_control", "last_filing_indicator",
-    "type_of_return", "amount_codes", "blank_2", "foreign_entity_indicator",
-    "first_payer_name", "second_payer_name", "transfer_agent_control",
-    "payer_shipping_address", "payer_city", "payer_state", "payer_zip_code",
-    "payer_telephone_number_and_ext", "blank_3", "record_sequence_number",
-    "blank_4", "blank_5"
+_PAYER_TRANSFORMS_ARR = [
+    ("record_type","A",1,"\x00",lambda x: x),
+    ("payment_year","",4,"\x00",lambda x: digits_only(x)),
+    ("combined_fed_state","",1,"\x00",lambda x: x),
+    ("blank_1","",5,"\x00",lambda x: x),
+    ("payer_tin","",9,"\x00",lambda x: digits_only(x)),
+    ("payer_name_control","",4,"\x00",lambda x: uppercase(x)),
+    ("last_filing_indicator","",1,"\x00",lambda x: x),
+    ("type_of_return","A",2,"\x00",lambda x: uppercase(x)),
+    ("amount_codes","7",16,"\x00",lambda x: x),
+    ("blank_2","",8,"\x00",lambda x: x),
+    ("foreign_entity_indicator","",1,"\x00",lambda x: x),
+    ("first_payer_name","",40,"\x00",lambda x: uppercase(x)),
+    ("second_payer_name","",40,"\x00",lambda x: uppercase(x)),
+    ("transfer_agent_control","0",1,"\x00",lambda x: x),
+    ("payer_shipping_address","",40,"\x00",lambda x: uppercase(x)),
+    ("payer_city","",40,"\x00",lambda x: uppercase(x)),
+    ("payer_state","",2,"\x00",lambda x: uppercase(x)),
+    ("payer_zip_code","",9,"\x00",lambda x: digits_only(x)),
+    ("payer_telephone_number_and_ext","",15,"\x00",lambda x: digits_only(x)),
+    ("blank_3","",260,"\x00",lambda x: x),
+    ("record_sequence_number","00000002",8,"\x00",lambda x: rjust_zero(x,8)),
+    ("blank_4","",241,"\x00",lambda x: x),
+    ("blank_5","",2,"\x00",lambda x: x)
 ]
+
+_PAYER_TRANSFORMS = transform_dict(_PAYER_TRANSFORMS_ARR)
 
 def xform(data):
     """
@@ -113,4 +82,6 @@ def fire(data):
     str
         String formatted to meet IRS Publication 1220
     """
-    return fire_entity(_PAYER_TRANSFORMS, _PAYER_SORT, data)
+    return fire_entity(_PAYER_TRANSFORMS,
+                       [field[0] for field in _PAYER_TRANSFORMS_ARR],
+                       data)

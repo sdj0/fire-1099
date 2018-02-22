@@ -5,7 +5,7 @@ Representation of a "transmitter" record, including transformation functions
 and support functions for conversion into different formats.
 """
 from translator.util import digits_only, uppercase, rjust_zero
-from translator.util import xform_entity, fire_entity
+from translator.util import xform_entity, fire_entity, transform_dict
 
 """
 _TRANSMITTER_TRANSFORMS
@@ -15,100 +15,51 @@ Values in key-value pairs represent metadata in the following format:
 
 (default value, length, fill character, transformation function)
 
-
 WARNING
 ------- 
 any edits to the keys or key names must be reflected in the SORT 
 array. 
 """
-_TRANSMITTER_TRANSFORMS = {
-    "record_type":
-        ("T", 1, "\x00", lambda x: x),
-    "payment_year":
-        ("0000", 4, "0", lambda x: digits_only(x)),
-    "prior_year_data_indicator":
-        ("", 1, "\x00", lambda x: uppercase(x)),
-    "transmitter_tin":
-        ("000000000", 9, "0", lambda x: digits_only(x)),
-    "transmitter_control_code":
-        ("", 5, "\x00", lambda x: uppercase(x)),
-    "blank_1":
-        ("", 7, "\x00", lambda x: x),
-    "test_file_indicator":
-        ("T", 1, "\x00", lambda x: x),
-    "foreign_entity_indicator":
-        ("", 1, "\x00", lambda x: x),
-    "transmitter_name":
-        ("", 40, "\x00", lambda x: uppercase(x)),
-    "transmitter_name_contd":
-        ("", 40, "\x00", lambda x: uppercase(x)),
-    "company_name":
-        ("", 40, "\x00", lambda x: uppercase(x)),
-    "company_name_contd":
-        ("", 40, "\x00", lambda x: uppercase(x)),
-    "company_mailing_address":
-        ("", 40, "\x00", lambda x: uppercase(x)),
-    "company_city":
-        ("", 40, "\x00", lambda x: uppercase(x)),
-    "company_state":
-        ("", 2, "\x00", lambda x: uppercase(x)),
-    "company_zip_code":
-        ("", 9, "\x00", lambda x: digits_only(x)),
-    "blank_2":
-        ("", 15, "\x00", lambda x: x),
-    "total_number_of_payees":
-        ("00000000", 8, "0", lambda x: rjust_zero(x, 8)),
-    "contact_name":
-        ("", 40, "\x00", lambda x: x),
-    "contact_telephone_number_and_ext":
-        ("", 15, "\x00", lambda x: digits_only(x)),
-    "contact_email_address":
-        ("", 50, "\x00", lambda x: (x)),
-    "blank_3":
-        ("", 91, "\x00", lambda x: x),
-    "record_sequence_number":
-        ("", 8, "\x00", lambda x: x),
-    "blank_4":
-        ("", 10, "\x00", lambda x: x),
-    "vendor_indicator":
-        ("I", 1, "\x00", lambda x: uppercase(x)),
-    "vendor_name":
-        ("", 40, "\x00", lambda x: uppercase(x)),
-    "vendor_mailing_address":
-        ("", 40, "\x00", lambda x: x),
-    "vendor_city":
-        ("", 40, "\x00", lambda x: uppercase(x)),
-    "vendor_state":
-        ("", 2, "\x00", lambda x: uppercase(x)),
-    "vendor_zip_code":
-        ("", 9, "\x00", lambda x: x),
-    "vendor_contact_name":
-        ("", 40, "\x00", lambda x: uppercase(x)),
-    "vendor_contact_telephone_and_ext":
-        ("", 15, "\x00", lambda x: digits_only(x)),
-    "blank_5":
-        ("", 35, "\x00", lambda x: x),
-    "vendor_foreign_entity_indicator":
-        ("", 1, "\x00", lambda x: uppercase(x)),
-    "blank_6":
-        ("", 8, "\x00", lambda x: x),
-    "blank_7":
-        ("", 2, "\x00", lambda x: x)
-}
-
-_TRANSMITTER_SORT = [
-    "record_type", "payment_year",
-    "prior_year_data_indicator", "transmitter_tin", "transmitter_control_code",
-    "blank_1", "test_file_indicator", "foreign_entity_indicator",
-    "transmitter_name", "transmitter_name_contd", "company_name",
-    "company_name_contd", "company_mailing_address", "company_city",
-    "company_state", "company_zip_code", "blank_2", "total_number_of_payees",
-    "contact_name", "contact_telephone_number_and_ext", "contact_email_address",
-    "blank_3", "record_sequence_number", "blank_4", "vendor_indicator",
-    "vendor_name", "vendor_mailing_address", "vendor_city", "vendor_state",
-    "vendor_zip_code", "vendor_contact_name", "vendor_contact_telephone_and_ext",
-    "blank_5", "vendor_foreign_entity_indicator", "blank_6", "blank_7"
+_TRANSMITTER_TRANSFORMS_ARR = [
+    ("record_type","T",1,"\x00",lambda x: x),
+    ("payment_year","0000",4,"0",lambda x: digits_only(x)),
+    ("prior_year_data_indicator","",1,"\x00",lambda x: uppercase(x)),
+    ("transmitter_tin","000000000",9,"0",lambda x: digits_only(x)),
+    ("transmitter_control_code","",5,"\x00",lambda x: uppercase(x)),
+    ("blank_1","",7,"\x00",lambda x: x),
+    ("test_file_indicator","T",1,"\x00",lambda x: x),
+    ("foreign_entity_indicator","",1,"\x00",lambda x: x),
+    ("transmitter_name","",40,"\x00",lambda x: uppercase(x)),
+    ("transmitter_name_contd","",40,"\x00",lambda x: uppercase(x)),
+    ("company_name","",40,"\x00",lambda x: uppercase(x)),
+    ("company_name_contd","",40,"\x00",lambda x: uppercase(x)),
+    ("company_mailing_address","",40,"\x00",lambda x: uppercase(x)),
+    ("company_city","",40,"\x00",lambda x: uppercase(x)),
+    ("company_state","",2,"\x00",lambda x: uppercase(x)),
+    ("company_zip_code","",9,"\x00",lambda x: digits_only(x)),
+    ("blank_2","",15,"\x00",lambda x: x),
+    ("total_number_of_payees","00000000",8,"0",lambda x: rjust_zero(x,8)),
+    ("contact_name","",40,"\x00",lambda x: x),
+    ("contact_telephone_number_and_ext","",15,"\x00",lambda x: digits_only(x)),
+    ("contact_email_address","",50,"\x00",lambda x: (x)),
+    ("blank_3","",91,"\x00",lambda x: x),
+    ("record_sequence_number","",8,"\x00",lambda x: x),
+    ("blank_4","",10,"\x00",lambda x: x),
+    ("vendor_indicator","I",1,"\x00",lambda x: uppercase(x)),
+    ("vendor_name","",40,"\x00",lambda x: uppercase(x)),
+    ("vendor_mailing_address","",40,"\x00",lambda x: x),
+    ("vendor_city","",40,"\x00",lambda x: uppercase(x)),
+    ("vendor_state","",2,"\x00",lambda x: uppercase(x)),
+    ("vendor_zip_code","",9,"\x00",lambda x: x),
+    ("vendor_contact_name","",40,"\x00",lambda x: uppercase(x)),
+    ("vendor_contact_telephone_and_ext","",15,"\x00",lambda x: digits_only(x)),
+    ("blank_5","",35,"\x00",lambda x: x),
+    ("vendor_foreign_entity_indicator","",1,"\x00",lambda x: uppercase(x)),
+    ("blank_6","",8,"\x00",lambda x: x),
+    ("blank_7","",2,"\x00",lambda x: x)
 ]
+
+_TRANSMITTER_TRANSFORMS = transform_dict(_TRANSMITTER_TRANSFORMS_ARR)
 
 def xform(data):
     """
@@ -146,4 +97,6 @@ def fire(data):
     str
         String formatted to meet IRS Publication 1220
     """
-    return fire_entity(_TRANSMITTER_TRANSFORMS, _TRANSMITTER_SORT, data)
+    return fire_entity(_TRANSMITTER_TRANSFORMS,
+                       [field[0] for field in _TRANSMITTER_TRANSFORMS_ARR],
+                       data)

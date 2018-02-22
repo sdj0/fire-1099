@@ -7,7 +7,7 @@ Support functions are built to handle arrays of payees (as opposed to
 an individual payee)
 """
 from translator.util import digits_only, uppercase, rjust_zero
-from translator.util import xform_entity, fire_entity
+from translator.util import xform_entity, fire_entity, transform_dict
 """
 _PAYEE_TRANSFORMS
 -----------------------
@@ -21,103 +21,57 @@ WARNING
 any edits to the keys or key names must be reflected in the SORT
 array.
 """
-_PAYEE_TRANSFORMS = {
-    "record_type":
-        ("B", 1, "\x00", lambda x: (x)),
-    "payment_year":
-        ("", 4, "\x00", lambda x: (x)),
-    "corrected_return_indicator":
-        ("", 1, "\x00", lambda x: uppercase(x)),
-    "payees_name_control":
-        ("", 4, "\x00", lambda x: uppercase(x)),
-    "type_of_tin":
-        ("1", 1, "\x00", lambda x: (x)),
-    "payees_tin":
-        ("000000000", 9, "\x00", lambda x: digits_only(x)),
-    "payers_account_number_for_payee":
-        ("", 20, "\x00", lambda x: (x)),
-    "payers_office_code":
-        ("", 4, "\x00", lambda x: (x)),
-    "blank_1":
-        ("", 10, "\x00", lambda x: (x)),
-    "payment_amount_1":
-        ("000000000000", 12, "\x00", lambda x: rjust_zero(x, 12)),
-    "payment_amount_2":
-        ("000000000000", 12, "\x00", lambda x: rjust_zero(x, 12)),
-    "payment_amount_3":
-        ("000000000000", 12, "\x00", lambda x: rjust_zero(x, 12)),
-    "payment_amount_4":
-        ("000000000000", 12, "\x00", lambda x: rjust_zero(x, 12)),
-    "payment_amount_5":
-        ("000000000000", 12, "\x00", lambda x: rjust_zero(x, 12)),
-    "payment_amount_6":
-        ("000000000000", 12, "\x00", lambda x: rjust_zero(x, 12)),
-    "payment_amount_7":
-        ("000000000000", 12, "\x00", lambda x: rjust_zero(x, 12)),
-    "payment_amount_8":
-        ("000000000000", 12, "\x00", lambda x: rjust_zero(x, 12)),
-    "payment_amount_9":
-        ("000000000000", 12, "\x00", lambda x: rjust_zero(x, 12)),
-    "payment_amount_A":
-        ("000000000000", 12, "\x00", lambda x: rjust_zero(x, 12)),
-    "payment_amount_B":
-        ("000000000000", 12, "\x00", lambda x: rjust_zero(x, 12)),
-    "payment_amount_C":
-        ("000000000000", 12, "\x00", lambda x: rjust_zero(x, 12)),
-    "payment_amount_D":
-        ("000000000000", 12, "\x00", lambda x: rjust_zero(x, 12)),
-    "payment_amount_E":
-        ("000000000000", 12, "\x00", lambda x: rjust_zero(x, 12)),
-    "payment_amount_F":
-        ("000000000000", 12, "\x00", lambda x: rjust_zero(x, 12)),
-    "payment_amount_G":
-        ("000000000000", 12, "\x00", lambda x: rjust_zero(x, 12)),
-    "foreign_country_indicator":
-        ("", 1, "\x00", lambda x: (x)),
-    "first_payee_name_line":
-        ("", 40, "\x00", lambda x: uppercase(x)),
-    "second_payee_name_line":
-        ("", 40, "\x00", lambda x: uppercase(x)),
-    "blank_2":
-        ("", 40, "\x00", lambda x: (x)),
-    "payee_mailing_address":
-        ("", 40, "\x00", lambda x: (x)),
-    "blank_3":
-        ("", 40, "\x00", lambda x: (x)),
-    "payee_city":
-        ("", 40, "\x00", lambda x: (x)),
-    "payee_state":
-        ("", 2, "\x00", lambda x: (x)),
-    "payee_zip_code":
-        ("", 9, "\x00", lambda x: (x)),
-    "blank_4":
-        ("", 1, "\x00", lambda x: (x)),
-    "record_sequence_number":
-        ("00000003", 8, "\x00", lambda x: rjust_zero(x, 8)),
-    "blank_5":
-        ("", 36, "\x00", lambda x: (x)),
-    "second_tin_notice":
-        ("", 1, "\x00", lambda x: (x)),
-    "blank_6":
-        ("", 2, "\x00", lambda x: (x)),
-    "direct_sales_indicator":
-        ("", 1, "\x00", lambda x: (x)),
-    "fatca_filing_requirement_indicator":
-        ("", 1, "\x00", lambda x: (x)),
-    "blank_7":
-        ("", 114, "\x00", lambda x: (x)),
-    "special_data_entries":
-        ("", 60, "\x00", lambda x: (x)),
-    "state_income_tax_withheld":
-        ("", 12, "\x00", lambda x: (x)),
-    "local_income_tax_withheld":
-        ("", 12, "\x00", lambda x: (x)),
-    "combined_federal_state_code":
-        ("", 2, "\x00", lambda x: (x)),
-    "blank_8":
-        ("", 2, "\x00", lambda x: (x))
-}
+_PAYEE_TRANSFORMS_ARR = [
+    ("record_type","B",1,"\x00",lambda x: (x)),
+    ("payment_year","",4,"\x00",lambda x: (x)),
+    ("corrected_return_indicator","",1,"\x00",lambda x: uppercase(x)),
+    ("payees_name_control","",4,"\x00",lambda x: uppercase(x)),
+    ("type_of_tin","1",1,"\x00",lambda x: (x)),
+    ("payees_tin","000000000",9,"\x00",lambda x: digits_only(x)),
+    ("payers_account_number_for_payee","",20,"\x00",lambda x: (x)),
+    ("payers_office_code","",4,"\x00",lambda x: (x)),
+    ("blank_1","",10,"\x00",lambda x: (x)),
+    ("payment_amount_1","000000000000",12,"\x00",lambda x: rjust_zero(x,12)),
+    ("payment_amount_2","000000000000",12,"\x00",lambda x: rjust_zero(x,12)),
+    ("payment_amount_3","000000000000",12,"\x00",lambda x: rjust_zero(x,12)),
+    ("payment_amount_4","000000000000",12,"\x00",lambda x: rjust_zero(x,12)),
+    ("payment_amount_5","000000000000",12,"\x00",lambda x: rjust_zero(x,12)),
+    ("payment_amount_6","000000000000",12,"\x00",lambda x: rjust_zero(x,12)),
+    ("payment_amount_7","000000000000",12,"\x00",lambda x: rjust_zero(x,12)),
+    ("payment_amount_8","000000000000",12,"\x00",lambda x: rjust_zero(x,12)),
+    ("payment_amount_9","000000000000",12,"\x00",lambda x: rjust_zero(x,12)),
+    ("payment_amount_A","000000000000",12,"\x00",lambda x: rjust_zero(x,12)),
+    ("payment_amount_B","000000000000",12,"\x00",lambda x: rjust_zero(x,12)),
+    ("payment_amount_C","000000000000",12,"\x00",lambda x: rjust_zero(x,12)),
+    ("payment_amount_D","000000000000",12,"\x00",lambda x: rjust_zero(x,12)),
+    ("payment_amount_E","000000000000",12,"\x00",lambda x: rjust_zero(x,12)),
+    ("payment_amount_F","000000000000",12,"\x00",lambda x: rjust_zero(x,12)),
+    ("payment_amount_G","000000000000",12,"\x00",lambda x: rjust_zero(x,12)),
+    ("foreign_country_indicator","",1,"\x00",lambda x: (x)),
+    ("first_payee_name_line","",40,"\x00",lambda x: uppercase(x)),
+    ("second_payee_name_line","",40,"\x00",lambda x: uppercase(x)),
+    ("blank_2","",40,"\x00",lambda x: (x)),
+    ("payee_mailing_address","",40,"\x00",lambda x: (x)),
+    ("blank_3","",40,"\x00",lambda x: (x)),
+    ("payee_city","",40,"\x00",lambda x: (x)),
+    ("payee_state","",2,"\x00",lambda x: (x)),
+    ("payee_zip_code","",9,"\x00",lambda x: (x)),
+    ("blank_4","",1,"\x00",lambda x: (x)),
+    ("record_sequence_number","00000003",8,"\x00",lambda x: rjust_zero(x,8)),
+    ("blank_5","",36,"\x00",lambda x: (x)),
+    ("second_tin_notice","",1,"\x00",lambda x: (x)),
+    ("blank_6","",2,"\x00",lambda x: (x)),
+    ("direct_sales_indicator","",1,"\x00",lambda x: (x)),
+    ("fatca_filing_requirement_indicator","",1,"\x00",lambda x: (x)),
+    ("blank_7","",114,"\x00",lambda x: (x)),
+    ("special_data_entries","",60,"\x00",lambda x: (x)),
+    ("state_income_tax_withheld","",12,"\x00",lambda x: (x)),
+    ("local_income_tax_withheld","",12,"\x00",lambda x: (x)),
+    ("combined_federal_state_code","",2,"\x00",lambda x: (x)),
+    ("blank_8","",2,"\x00",lambda x: (x))
+]
 
+_PAYEE_TRANSFORMS = transform_dict(_PAYEE_TRANSFORMS_ARR)
 _PAYEE_SORT = [
     "record_type", "payment_year", "corrected_return_indicator",
     "payees_name_control", "type_of_tin", "payees_tin",
@@ -176,7 +130,8 @@ def fire(data):
     """
     payees_string = ""
     for payee in data:
-        payees_string += fire_entity(_PAYEE_TRANSFORMS, _PAYEE_SORT, payee)
+        payees_string += fire_entity(
+            _PAYEE_TRANSFORMS,
+            [field[0] for field in _PAYEE_TRANSFORMS_ARR],
+            payee)
     return payees_string
-
-

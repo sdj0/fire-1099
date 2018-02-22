@@ -154,3 +154,9 @@ def uppercase(value):
 rjust_zer(str, int): right-justifies *value* and pads with zeros to *length*"""
 def rjust_zero(value, length):
     return f"{digits_only(value):0>{length}}"
+
+def transform_dict(transform_array):
+    transform_dict = {field[0]:field[1:] for field in transform_array}
+    return transform_dict
+
+
