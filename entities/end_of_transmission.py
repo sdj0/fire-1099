@@ -4,7 +4,7 @@ Representation of an "end_of_transmission" record, including transformation
 functions and support functions for conversion into different formats.
 """
 from translator.util import rjust_zero
-from translator.util import xform_entity, fire_entity, transform_dict
+from translator.util import factor_transforms, xform_entity, fire_entity
 
 """
 _END_OF_TRANSMISSION_TRANSFORMS
@@ -14,20 +14,22 @@ Values in key-value pairs represent metadata in the following format:
 
 (default value, length, fill character, transformation function)
 """
-_END_OF_TRANSMISSION_TRANSFORMS_ARR = [
-    ("record_type", "F", 1, "\x00", lambda x: (x)),
-    ("number_of_a_records", "00000000", 8, "0", lambda x: rjust_zero(x, 8)),
-    ("zeros", 21*"0", 21, "0", lambda x: (x)),
-    ("blank_1", "", 19, "\x00", lambda x: (x)),
-    ("total_number_of_payees", "00000000", 8, "0", lambda x: rjust_zero(x, 8)),
-    ("blank_2", "", 442, "\x00", lambda x: (x)),
-    ("record_sequence_number", "", 8, "0", lambda x: (x)),
-    ("blank_3", "", 241, "\x00", lambda x: (x)),
-    ("blank_4", "", 2, "\x00", lambda x: (x))
+
+_ITEMS = [
+    ("record_type", ("F", 1, "\x00", lambda x: x)),
+    ("number_of_a_records", ("00000000", 8, "0", lambda x: rjust_zero(x, 8))),
+    ("zeros", (21*"0", 21, "0", lambda x: x)),
+    ("blank_1", ("", 19, "\x00", lambda x: x)),
+    ("total_number_of_payees",
+     ("00000000", 8, "0", lambda x: rjust_zero(x, 8))),
+    ("blank_2", ("", 442, "\x00", lambda x: x)),
+    ("record_sequence_number", ("", 8, "0", lambda x: x)),
+    ("blank_3", ("", 241, "\x00", lambda x: x)),
+    ("blank_4", ("", 2, "\x00", lambda x: x))
 ]
 
-_END_OF_TRANSMISSION_TRANSFORMS = \
-    transform_dict(_END_OF_TRANSMISSION_TRANSFORMS_ARR)
+_END_OF_TRANSMISSION_SORT, _END_OF_TRANSMISSION_TRANSFORMS = \
+    factor_transforms(_ITEMS)
 
 def xform(data):
     """
@@ -67,5 +69,4 @@ def fire(data):
     """
     return fire_entity(
         _END_OF_TRANSMISSION_TRANSFORMS, 
-        [field[0] for field in _END_OF_TRANSMISSION_TRANSFORMS_ARR],
-        data)
+        _END_OF_TRANSMISSION_SORT, data)
