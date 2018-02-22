@@ -4,7 +4,7 @@ Representation of a "extension_of_time" record, including transformation
 functions and support functions for conversion into different formats.
 """
 from translator.util import digits_only, uppercase
-from translator.util import xform_entity, fire_entity
+from translator.util import factor_transforms, xform_entity, fire_entity
 
 """
 EXTENSION_OF_TIME_TRANSFORMS
@@ -13,45 +13,25 @@ Stores metadata associated with each field in an Extension of Time record.
 Values in key-value pairs represent metadata in the following format:
 
 (default value, length, fill character, transformation function)
-
-WARNING
-------- 
-any edits to the keys or key names must be reflected in the SORT 
-array.
 """
-EXTENSION_OF_TIME_TRANSFORMS = {
-    "transmitter_control_code":
-        ("", 5, "\x00", lambda x: uppercase(x)),
-    "payer_tin":
-        ("", 9, "\x00", lambda x: digits_only(x)),
-    "first_payer_name":
-        ("", 40, "\x00", lambda x: uppercase(x)),
-    "second_payer_name":
-        ("", 40, "\x00", lambda x: uppercase(x)),
-    "payer_shipping_address":
-        ("", 40, "\x00", lambda x: uppercase(x)),
-    "payer_city":
-        ("", 40, "\x00", lambda x: uppercase(x)),
-    "payer_state":
-        ("", 2, "\x00", lambda x: uppercase(x)),
-    "payer_zip_code":
-        ("", 9, "\x00", lambda x: digits_only(x)),
-    "document_indicator":
-        ("A", 1, "\x00", lambda x: x),
-    "foreign_entity_indicator":
-        ("", 1, "\x00", lambda x: x),
-    "blank_1":
-        ("", 11, "\x00", lambda x: x),
-    "blank_2":
-        ("", 2, "\x00", lambda x: x)
-}
 
-_EXTENSION_OF_TIME_SORT = [
-    "transmitter_control_code", "payer_tin", "first_payer_name",
-    "second_payer_name", "payer_shipping_address", "payer_city", "payer_state",
-    "payer_zip_code", "document_indicator", "foreign_entity_indicator",
-    "blank_1", "blank_2"
+_ITEMS = [
+    ("transmitter_control_code", ("", 5, "\x00", uppercase)),
+    ("payer_tin", ("", 9, "\x00", digits_only)),
+    ("first_payer_name", ("", 40, "\x00", uppercase)),
+    ("second_payer_name", ("", 40, "\x00", uppercase)),
+    ("payer_shipping_address", ("", 40, "\x00", uppercase)),
+    ("payer_city", ("", 40, "\x00", uppercase)),
+    ("payer_state", ("", 2, "\x00", uppercase)),
+    ("payer_zip_code", ("", 9, "\x00", digits_only)),
+    ("document_indicator", ("A", 1, "\x00", lambda x: x)),
+    ("foreign_entity_indicator", ("", 1, "\x00", lambda x: x)),
+    ("blank_1", ("", 11, "\x00", lambda x: x)),
+    ("blank_2", ("", 2, "\x00", lambda x: x))
 ]
+
+_EXTENSION_OF_TIME_SORT, _EXTENSION_OF_TIME_TRANSFORMS = \
+    factor_transforms(_ITEMS)
 
 def xform(data):
     """
@@ -71,7 +51,7 @@ def xform(data):
         Dictionary containing processed (transformed) data provided as a
         parameter.
     """
-    return xform_entity(EXTENSION_OF_TIME_TRANSFORMS, data)
+    return xform_entity(_EXTENSION_OF_TIME_TRANSFORMS, data)
 
 def fire(data):
     """
@@ -89,5 +69,5 @@ def fire(data):
     str
         String formatted to meet IRS Publication 1220
     """
-    return fire_entity(EXTENSION_OF_TIME_TRANSFORMS, 
+    return fire_entity(_EXTENSION_OF_TIME_TRANSFORMS, 
                        _EXTENSION_OF_TIME_SORT, data, 200)

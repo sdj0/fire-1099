@@ -155,8 +155,28 @@ rjust_zer(str, int): right-justifies *value* and pads with zeros to *length*"""
 def rjust_zero(value, length):
     return f"{digits_only(value):0>{length}}"
 
-def transform_dict(transform_array):
-    transform_dict = {field[0]:field[1:] for field in transform_array}
-    return transform_dict
+def factor_transforms(transforms):
+    """
+    Factor a list of transform tuples into a list of sort keys and a dict of
+    transforms
 
+    Parameters
+    ----------
+    transforms : list of tuple
+                 The transforms to factor
 
+    Returns
+    -------
+    sort_keys : list of str
+                The names of the transforms, in their original order
+    transform_dict : dict of tuple
+                     A dict of the transforms, keyed by their sort key
+    """
+    sort_keys = list()
+    transform_dict = dict()
+
+    for transform_name, transform in transforms:
+        sort_keys.append(transform_name)
+        transform_dict[transform_name] = transform
+
+    return sort_keys, transform_dict

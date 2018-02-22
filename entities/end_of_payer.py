@@ -3,8 +3,10 @@ Module: entities.end_of_payer
 Representation of an "end_of_payer" record, including transformation functions
 and support functions for conversion into different formats.
 """
+from itertools import chain
+
 from translator.util import rjust_zero
-from translator.util import xform_entity, fire_entity, transform_dict
+from translator.util import factor_transforms, xform_entity, fire_entity
 
 """
 _END_OF_PAYER_TRANSFORMS
@@ -13,39 +15,27 @@ Stores metadata associated with each field in a Transmitter record.
 Values in key-value pairs represent metadata in the following format:
 
 (default value, length, fill character, transformation function)
-
-WARNING
-------- 
-any edits to the keys or key names must be reflected in the SORT 
-array.
 """
-_END_OF_PAYER_TRANSFORMS_ARR = [
-    ("record_type", "C", 1, "\x00", lambda x: (x)),
-    ("number_of_payees", "", 8, "0", lambda x: (x)),
-    ("blank_1", "", 6, "\x00", lambda x: (x)),
-    ("payment_amount_1", 18*"0", 18, "0", lambda x: rjust_zero(x, 18)),
-    ("payment_amount_2", 18*"0", 18, "0", lambda x: rjust_zero(x, 18)),
-    ("payment_amount_3", 18*"0", 18, "0", lambda x: rjust_zero(x, 18)),
-    ("payment_amount_4", 18*"0", 18, "0", lambda x: rjust_zero(x, 18)),
-    ("payment_amount_5", 18*"0", 18, "0", lambda x: rjust_zero(x, 18)),
-    ("payment_amount_6", 18*"0", 18, "0", lambda x: rjust_zero(x, 18)),
-    ("payment_amount_7", 18*"0", 18, "0", lambda x: rjust_zero(x, 18)),
-    ("payment_amount_8", 18*"0", 18, "0", lambda x: rjust_zero(x, 18)),
-    ("payment_amount_9", 18*"0", 18, "0", lambda x: rjust_zero(x, 18)),
-    ("payment_amount_A", 18*"0", 18, "0", lambda x: rjust_zero(x, 18)),
-    ("payment_amount_B", 18*"0", 18, "0", lambda x: rjust_zero(x, 18)),
-    ("payment_amount_C", 18*"0", 18, "0", lambda x: rjust_zero(x, 18)),
-    ("payment_amount_D", 18*"0", 18, "0", lambda x: rjust_zero(x, 18)),
-    ("payment_amount_E", 18*"0", 18, "0", lambda x: rjust_zero(x, 18)),
-    ("payment_amount_F", 18*"0", 18, "0", lambda x: rjust_zero(x, 18)),
-    ("payment_amount_G", 18*"0", 18, "0", lambda x: rjust_zero(x, 18)),
-    ("blank_2", "", 196, "\x00", lambda x: (x)),
-    ("record_sequence_number", "", 8, "0", lambda x: (x)),
-    ("blank_3", "", 241, "\x00", lambda x: (x)),
-    ("blank_4", "", 2, "\x00", lambda x: (x))
+
+_ITEMS = [
+    ("record_type", ("C", 1, "\x00", lambda x: x)),
+    ("number_of_payees", ("", 8, "0", lambda x: x)),
+    ("blank_1", ("", 6, "\x00", lambda x: x)),
 ]
 
-_END_OF_PAYER_TRANSFORMS = transform_dict(_END_OF_PAYER_TRANSFORMS_ARR)
+for field in chain((x for x in range(1, 10)), \
+                   (chr(x) for x in range(ord('A'), ord('H')))):
+    _ITEMS.append((f"payment_amount_{field}",
+                   (18*"0", 18, "0", lambda x: rjust_zero(x, 18))))
+
+_ITEMS += [
+    ("blank_2", ("", 196, "\x00", lambda x: x)),
+    ("record_sequence_number", ("", 8, "0", lambda x: x)),
+    ("blank_3", ("", 241, "\x00", lambda x: x)),
+    ("blank_4", ("", 2, "\x00", lambda x: x))
+]
+
+_END_OF_PAYER_SORT, _END_OF_PAYER_TRANSFORMS = factor_transforms(_ITEMS)
 
 def xform(data):
     """
@@ -83,6 +73,4 @@ def fire(data):
     str
         String formatted to meet IRS Publication 1220
     """
-    return fire_entity(_END_OF_PAYER_TRANSFORMS,
-                       [field[0] for field in _END_OF_PAYER_TRANSFORMS_ARR],
-                       data)
+    return fire_entity(_END_OF_PAYER_TRANSFORMS, _END_OF_PAYER_SORT, data)
