@@ -18,7 +18,7 @@ setup(
 
     version='0.0.1-alpha',
 
-    packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
+    packages=find_packages(exclude=['contrib', 'docs', 'tests*', 'spec*']),
     include_package_data=True,
     install_requires=['click', 'jsonschema'],
     entry_points = '''
