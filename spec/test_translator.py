@@ -9,7 +9,7 @@ import os
 
 # Tests whether a correct input file generates a correct output file
 # Tests whether an output file is defaulted if no path is given
-OUTPUT_FILE_PREFIX = "./data/test_outfile"
+OUTPUT_FILE_PREFIX = "./spec/data/test_outfile"
 
 def test_translator_run_full_with_specified_output_file():
     output_path = f"{OUTPUT_FILE_PREFIX}_run_valid.ascii"
@@ -23,19 +23,19 @@ def test_translator_run_full_with_specified_output_file():
     os.remove(output_path)
 
 def test_translator_run_full_with_default_output_file():
-    start_len = len([f for f in os.listdir('./data/') if f.startswith(
+    start_len = len([f for f in os.listdir('./spec/data/') if f.startswith(
         "output_{}".format(strftime("%Y-%m-%d", gmtime())))])
     translator.run(VALID_ALL_PATH, None)
-    file_names = [f for f in os.listdir('./data/') if f.startswith(
+    file_names = [f for f in os.listdir('./spec/data/') if f.startswith(
         "output_{}".format(strftime("%Y-%m-%d", gmtime())))]
     assert len(file_names) == start_len + 1
     for file in file_names:
         if file.startswith("output_"):
-          os.remove(f"./data/{file}")
+          os.remove(f"./spec/data/{file}")
 
 @raises(FileNotFoundError)
 def test_translator_run_full_process_invalid_path():
-    nonexistant_path = "./data/does/not/exist.json"
+    nonexistant_path = "./spec/data/does/not/exist.json"
     if os.path.isfile(nonexistant_path):
         os.remove(nonexistant_path)
     translator.run(VALID_ALL_PATH, nonexistant_path)

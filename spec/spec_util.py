@@ -8,8 +8,8 @@ import json
 from copy import deepcopy
 from nose.tools import *
 
-SCHEMA = json.load(open("../schema/base_schema.json"))
-VALID_ALL_PATH = "./data/valid_all.json"
+SCHEMA = json.load(open("./schema/base_schema.json"))
+VALID_ALL_PATH = "./spec/data/valid_all.json"
 INVALID_PHONE_NUMS = ["+1 555 666 7777", "555 A44 B777", "123ABC5678",
                       "123 45 67", "555 666 777788", "555 666 7777 #"]
 VALID_PHONE_NUMS = ["5556667777", "555-666-7777", "(555)666-7777", 

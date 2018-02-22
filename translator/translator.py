@@ -52,7 +52,8 @@ def run(input_path, output_path):
         optional system path for the output to be generated
 
     """
-    schema_path = "/Users/djeserkare/Code/irs/fire-1099/schema/base_schema.json"
+    module_path = os.path.split(os.path.realpath(__file__))[0]
+    schema_path = os.path.join(module_path, '../schema', 'base_schema.json')
     input_dirname = os.path.dirname(os.path.abspath(input_path))
     if output_path is None:
         output_path = "{}/output_{}".format(input_dirname, 
