@@ -11,7 +11,7 @@ from translator.util import factor_transforms, xform_entity, fire_entity
 """
 _END_OF_PAYER_TRANSFORMS
 -----------------------
-Stores metadata associated with each field in a Transmitter record. 
+Stores metadata associated with each field in a Transmitter record.
 Values in key-value pairs represent metadata in the following format:
 
 (default value, length, fill character, transformation function)
@@ -46,7 +46,7 @@ def xform(data):
     Parameters
     ----------
     data : dict
-        Expects data parameter to have keys that exist in the 
+        Expects data parameter to have keys that exist in the
         _END_OF_PAYER_TRANSFORMS dict.
 
     Returns

@@ -3,7 +3,7 @@
 # A comma-separated list of package or module names from where C extensions may
 # be loaded. Extensions are loading into the active Python interpreter and may
 # run arbitrary code
-extension-pkg-whitelist=numpy
+extension-pkg-whitelist=
 
 # Add files or directories to the blacklist. They should be base names, not
 # paths.
@@ -30,6 +30,10 @@ persistent=yes
 # Specify a configuration file.
 #rcfile=
 
+# When enabled, pylint would attempt to guess common misconfiguration and emit
+# user-friendly hints instead of false-positive error messages
+suggestion-mode=yes
+
 # Allow loading of arbitrary C extensions. Extensions are imported into the
 # active Python interpreter and may run arbitrary code.
 unsafe-load-any-extension=no
@@ -50,13 +54,13 @@ confidence=
 # --enable=similarities". If you want to run only the classes checker, but have
 # no Warning level messages displayed, use"--disable=all --enable=classes
 # --disable=W"
-# disable=print-statement,parameter-unpacking,unpacking-in-except,old-raise-syntax,backtick,long-suffix,old-ne-operator,old-octal-literal,import-star-module-level,raw-checker-failed,bad-inline-option,locally-disabled,locally-enabled,file-ignored,suppressed-message,useless-suppression,deprecated-pragma,apply-builtin,basestring-builtin,buffer-builtin,cmp-builtin,coerce-builtin,execfile-builtin,file-builtin,long-builtin,raw_input-builtin,reduce-builtin,standarderror-builtin,unicode-builtin,xrange-builtin,coerce-method,delslice-method,getslice-method,setslice-method,no-absolute-import,old-division,dict-iter-method,dict-view-method,next-method-called,metaclass-assignment,indexing-exception,raising-string,reload-builtin,oct-method,hex-method,nonzero-method,cmp-method,input-builtin,round-builtin,intern-builtin,unichr-builtin,map-builtin-not-iterating,zip-builtin-not-iterating,range-builtin-not-iterating,filter-builtin-not-iterating,using-cmp-argument,eq-without-hash,div-method,idiv-method,rdiv-method,exception-message-attribute,invalid-str-codec,sys-max-int,bad-python3-import,deprecated-string-function,deprecated-str-translate-call
+disable=pointless-string-statement
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
 # multiple time (only on the command line, not in the configuration file where
 # it should appear only once). See also the "--disable" option for examples.
-enable=
+enable=c-extension-no-member
 
 
 [REPORTS]
@@ -92,72 +96,90 @@ max-nested-blocks=5
 
 [BASIC]
 
-# Naming hint for argument names
-argument-name-hint=(([a-z][a-z0-9_]{2,30})|(_[a-z0-9_]*))$
+# Naming style matching correct argument names
+argument-naming-style=snake_case
 
-# Regular expression matching correct argument names
-argument-rgx=(([a-z][a-z0-9_]{2,30})|(_[a-z0-9_]*))$
+# Regular expression matching correct argument names. Overrides argument-
+# naming-style
+#argument-rgx=
 
-# Naming hint for attribute names
-attr-name-hint=(([a-z][a-z0-9_]{2,30})|(_[a-z0-9_]*))$
+# Naming style matching correct attribute names
+attr-naming-style=snake_case
 
-# Regular expression matching correct attribute names
-attr-rgx=(([a-z][a-z0-9_]{2,30})|(_[a-z0-9_]*))$
+# Regular expression matching correct attribute names. Overrides attr-naming-
+# style
+#attr-rgx=
 
 # Bad variable names which should always be refused, separated by a comma
-bad-names=foo,bar,baz,toto,tutu,tata
+bad-names=foo,
+          bar,
+          baz,
+          toto,
+          tutu,
+          tata
 
-# Naming hint for class attribute names
-class-attribute-name-hint=([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$
+# Naming style matching correct class attribute names
+class-attribute-naming-style=any
 
-# Regular expression matching correct class attribute names
-class-attribute-rgx=([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$
+# Regular expression matching correct class attribute names. Overrides class-
+# attribute-naming-style
+#class-attribute-rgx=
 
-# Naming hint for class names
-class-name-hint=[A-Z_][a-zA-Z0-9]+$
+# Naming style matching correct class names
+class-naming-style=PascalCase
 
-# Regular expression matching correct class names
-class-rgx=[A-Z_][a-zA-Z0-9]+$
+# Regular expression matching correct class names. Overrides class-naming-style
+#class-rgx=
 
-# Naming hint for constant names
-const-name-hint=(([A-Z_][A-Z0-9_]*)|(__.*__))$
+# Naming style matching correct constant names
+const-naming-style=UPPER_CASE
 
-# Regular expression matching correct constant names
-const-rgx=(([A-Z_][A-Z0-9_]*)|(__.*__))$
+# Regular expression matching correct constant names. Overrides const-naming-
+# style
+#const-rgx=
 
 # Minimum line length for functions/classes that require docstrings, shorter
 # ones are exempt.
 docstring-min-length=-1
 
-# Naming hint for function names
-function-name-hint=(([a-z][a-z0-9_]{2,30})|(_[a-z0-9_]*))$
+# Naming style matching correct function names
+function-naming-style=snake_case
 
-# Regular expression matching correct function names
-function-rgx=(([a-z][a-z0-9_]{2,30})|(_[a-z0-9_]*))$
+# Regular expression matching correct function names. Overrides function-
+# naming-style
+#function-rgx=
 
 # Good variable names which should always be accepted, separated by a comma
-good-names=e,i,j,k,ex,Run,_
+good-names=i,
+           j,
+           k,
+           ex,
+           Run,
+           _
 
 # Include a hint for the correct naming format with invalid-name
 include-naming-hint=no
 
-# Naming hint for inline iteration names
-inlinevar-name-hint=[A-Za-z_][A-Za-z0-9_]*$
+# Naming style matching correct inline iteration names
+inlinevar-naming-style=any
 
-# Regular expression matching correct inline iteration names
-inlinevar-rgx=[A-Za-z_][A-Za-z0-9_]*$
+# Regular expression matching correct inline iteration names. Overrides
+# inlinevar-naming-style
+#inlinevar-rgx=
 
-# Naming hint for method names
-method-name-hint=(([a-z][a-z0-9_]{2,30})|(_[a-z0-9_]*))$
+# Naming style matching correct method names
+method-naming-style=snake_case
 
-# Regular expression matching correct method names
-method-rgx=(([a-z][a-z0-9_]{2,30})|(_[a-z0-9_]*))$
+# Regular expression matching correct method names. Overrides method-naming-
+# style
+#method-rgx=
 
-# Naming hint for module names
-module-name-hint=(([a-z_][a-z0-9_]*)|([A-Z][a-zA-Z0-9]+))$
+# Naming style matching correct module names
+module-naming-style=snake_case
 
-# Regular expression matching correct module names
-module-rgx=(([a-z_][a-z0-9_]*)|([A-Z][a-zA-Z0-9]+))$
+# Regular expression matching correct module names. Overrides module-naming-
+# style
+#module-rgx=
 
 # Colon-delimited sets of names that determine each other's naming style when
 # the name regexes allow several styles.
@@ -171,11 +193,12 @@ no-docstring-rgx=^_
 # to this list to register other decorators that produce valid properties.
 property-classes=abc.abstractproperty
 
-# Naming hint for variable names
-variable-name-hint=(([a-z][a-z0-9_]{2,30})|(_[a-z0-9_]*))$
+# Naming style matching correct variable names
+variable-naming-style=snake_case
 
-# Regular expression matching correct variable names
-variable-rgx=(([a-z][a-z0-9_]{2,30})|(_[a-z0-9_]*))$
+# Regular expression matching correct variable names. Overrides variable-
+# naming-style
+#variable-rgx=
 
 
 [FORMAT]
@@ -203,7 +226,8 @@ max-module-lines=1000
 # separator` is used to allow tabulation in dicts, etc.: {1  : 1,\n222: 2}.
 # `trailing-comma` allows a space between comma and closing bracket: (a, ).
 # `empty-line` allows space-only lines.
-no-space-check=trailing-comma,dict-separator,empty-line
+no-space-check=trailing-comma,
+               dict-separator
 
 # Allow the body of a class to be on the same line as the declaration if body
 # contains single statement.
@@ -224,7 +248,9 @@ logging-modules=logging
 [MISCELLANEOUS]
 
 # List of note tags to take in consideration, separated by a comma.
-notes=FIXME,XXX,TODO
+notes=FIXME,
+      XXX,
+      TODO
 
 
 [SIMILARITIES]
@@ -236,13 +262,16 @@ ignore-comments=yes
 ignore-docstrings=yes
 
 # Ignore imports when computing similarities.
-ignore-imports=no
+ignore-imports=yes
 
 # Minimum lines number of a similarity.
 min-similarity-lines=4
 
 
 [SPELLING]
+
+# Limits count of emitted suggestions for spelling mistakes
+max-spelling-suggestions=4
 
 # Spelling dictionary name. Available dictionaries: none. To make it working
 # install python-enchant package.
@@ -318,7 +347,8 @@ allow-global-unused-variables=yes
 
 # List of strings which can identify a callback function by name. A callback
 # name must start or end with one of those strings.
-callbacks=cb_,_cb
+callbacks=cb_,
+          _cb
 
 # A regular expression matching the name of dummy variables (i.e. expectedly
 # not used).
@@ -333,17 +363,23 @@ init-import=no
 
 # List of qualified module names which can have objects that can redefine
 # builtins.
-redefining-builtins-modules=six.moves,future.builtins
+redefining-builtins-modules=six.moves,past.builtins,future.builtins
 
 
 [CLASSES]
 
 # List of method names used to declare (i.e. assign) instance attributes.
-defining-attr-methods=__init__,__new__,setUp
+defining-attr-methods=__init__,
+                      __new__,
+                      setUp
 
 # List of member names, which should be excluded from the protected access
 # warning.
-exclude-protected=_asdict,_fields,_replace,_source,_make
+exclude-protected=_asdict,
+                  _fields,
+                  _replace,
+                  _source,
+                  _make
 
 # List of valid names for the first argument in a class method.
 valid-classmethod-first-arg=cls
@@ -355,7 +391,7 @@ valid-metaclass-classmethod-first-arg=mcs
 [DESIGN]
 
 # Maximum number of arguments for function / method
-max-args=7
+max-args=5
 
 # Maximum number of attributes for a class (see R0902).
 max-attributes=7

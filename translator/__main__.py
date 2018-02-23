@@ -2,7 +2,7 @@
 Main entrypoint
 """
 
-from .main import main
+from .translator import cli
 
 if __name__ == '__main__':
-    main()
+    cli() # pylint: disable=no-value-for-parameter

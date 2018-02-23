@@ -1,14 +1,27 @@
-from nose.tools import *
-from pprint import pprint
+# pylint: disable=missing-docstring, invalid-name
 
-from spec_util import *
+from copy import deepcopy
+
+import jsonschema
+
+from jsonschema import validate
+from nose.tools import raises
+
+from spec_util import check_value_too_long, check_valid_phone_num, \
+                      check_invalid_phone_num, check_valid_tin, \
+                      check_invalid_tin, check_valid_zip, check_invalid_zip, \
+                      check_valid_email, check_invalid_email, \
+                      SCHEMA, TRANSMITTER_BLANK_MAP, VALID_ALL_DATA, \
+                      VALID_PHONE_NUMS, VALID_ZIPS, INVALID_ZIPS, \
+                      VALID_EMAILS, INVALID_EMAILS, INVALID_PHONE_NUMS, \
+                      VALID_TINS, INVALID_TINS
 from entities import transmitter
 
 VALID_TRANSMITTER = {}
 VALID_TRANSMITTER["transmitter"] = VALID_ALL_DATA["transmitter"]
 
 """
-Schema validation tests: transmitter 
+Schema validation tests: transmitter
 """
 def test_transmitter_schema_ignore_extra_data():
     temp = deepcopy(VALID_TRANSMITTER)
@@ -18,8 +31,7 @@ def test_transmitter_schema_ignore_extra_data():
 def test_transmitter_schema_overly_long_values():
     temp = deepcopy(VALID_TRANSMITTER)
     for key, value in temp["transmitter"].items():
-        if type(value) == str:
-            # pprint("Rewriting string for: {}".format(key))
+        if isinstance(value, str):
             yield check_value_too_long, \
                 temp, ["transmitter", key], value + 99*"A"
 
@@ -119,7 +131,6 @@ def test_transmitter_fire_padding_zeros():
     transformed = transmitter.xform(temp["transmitter"])
     test_string = transmitter.fire(transformed)
     num_of_payees = test_string[295:303]
-    pprint(num_of_payees)
     assert num_of_payees == "00000002"
 
 def test_transmitter_fire_blanks_layout():

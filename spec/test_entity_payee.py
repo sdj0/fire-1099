@@ -1,8 +1,21 @@
-from nose.tools import *
-from pprint import pprint
+# pylint: disable=missing-docstring, invalid-name
+
 import re
 
-from spec_util import *
+from copy import deepcopy
+
+import jsonschema
+
+from jsonschema import validate
+from nose.tools import raises
+
+from spec_util import VALID_ALL_DATA, SCHEMA, check_valid_amount, \
+                      check_invalid_amount, check_value_too_long, \
+                      check_valid_tin, check_invalid_tin, check_valid_zip, \
+                      check_invalid_zip, check_blanks, \
+                      VALID_TINS, INVALID_TINS, VALID_ZIPS, INVALID_ZIPS, \
+                      PAYEE_BLANK_MAP, VALID_DOLLAR_AMOUNTS, \
+                      INVALID_DOLLAR_AMOUNTS
 from entities import payees
 
 VALID_PAYEE = []
@@ -23,7 +36,7 @@ def test_payee_schema_overly_long_values():
     temp["payees"] = deepcopy(VALID_PAYEE)
     for i, payee in enumerate(temp["payees"]):
         for key, value in payee.items():
-            if type(value) == str:
+            if isinstance(value, str):
                 yield check_value_too_long, \
                     temp, ["payees", i, key], value + 99*"A"
 
@@ -31,23 +44,18 @@ def test_payee_schema_amount_codes():
     temp = {}
     temp["payees"] = deepcopy(VALID_PAYEE)
     for i, payee in enumerate(temp["payees"]):
-        for key, value in payee.items():
+        for key in payee.keys():
             if re.match(r"^payment_amount_", key):
-                subtest_valid_amount(temp, ["payees", i, key])
-                subtest_invalid_amount(temp, ["payees", i, key])
-
-def subtest_valid_amount(payee, key):
-    for amount in VALID_AMOUNTS:
-        yield check_valid_dollar_amount, payee, [key], amount
-
-def subtest_invalid_amount(payee, key):
-    for amount in INVALID_AMOUNTS:
-        yield check_invalid_dollar_amount, payee, [key], amount
+                payload = ["payees", i, key]
+                for amount in VALID_DOLLAR_AMOUNTS:
+                    yield check_valid_amount, temp, payload, amount
+                for amount in INVALID_DOLLAR_AMOUNTS:
+                    yield check_invalid_amount, temp, payload, amount
 
 def test_payee_schema_validation_tins():
     temp = {}
     temp["payees"] = deepcopy(VALID_PAYEE)
-    for i, payee in enumerate(temp["payees"]):
+    for i, _ in enumerate(temp["payees"]):
         for tin in VALID_TINS:
             yield check_valid_tin, \
                 temp, ["payees", i, "payees_tin"], tin
@@ -58,7 +66,7 @@ def test_payee_schema_validation_tins():
 def test_payee_schema_zip_codes():
     temp = {}
     temp["payees"] = deepcopy(VALID_PAYEE)
-    for i, payee in enumerate(temp["payees"]):
+    for i, _ in enumerate(temp["payees"]):
         for zip_code in VALID_ZIPS:
             yield check_valid_zip, \
                 temp, ["payees", i, "payee_zip_code"], zip_code
@@ -119,7 +127,6 @@ def test_payee_fire_padding_zeros():
     transformed = payees.xform(temp)
     test_string = payees.fire(transformed)
     sequence_num = test_string[499:507]
-    pprint(sequence_num)
     assert sequence_num == "00000002"
 
 def test_payee_fire_blanks_layout():
