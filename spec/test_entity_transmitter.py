@@ -15,7 +15,7 @@ from spec_util import check_value_too_long, check_valid_phone_num, \
                       VALID_PHONE_NUMS, VALID_ZIPS, INVALID_ZIPS, \
                       VALID_EMAILS, INVALID_EMAILS, INVALID_PHONE_NUMS, \
                       VALID_TINS, INVALID_TINS
-from entities import transmitter
+from fire.entities import transmitter
 
 VALID_TRANSMITTER = {}
 VALID_TRANSMITTER["transmitter"] = VALID_ALL_DATA["transmitter"]

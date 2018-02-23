@@ -1,1 +1,1 @@
-include schema/base_schema.json
+include fire/schema/base_schema.json

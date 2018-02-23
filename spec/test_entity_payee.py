@@ -16,7 +16,7 @@ from spec_util import VALID_ALL_DATA, SCHEMA, check_valid_amount, \
                       VALID_TINS, INVALID_TINS, VALID_ZIPS, INVALID_ZIPS, \
                       PAYEE_BLANK_MAP, VALID_DOLLAR_AMOUNTS, \
                       INVALID_DOLLAR_AMOUNTS
-from entities import payees
+from fire.entities import payees
 
 VALID_PAYEE = []
 VALID_PAYEE = VALID_ALL_DATA["payees"]

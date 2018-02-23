@@ -3,8 +3,8 @@ Module: entities.extension_of_time
 Representation of a "extension_of_time" record, including transformation
 functions and support functions for conversion into different formats.
 """
-from translator.util import digits_only, uppercase
-from translator.util import factor_transforms, xform_entity, fire_entity
+from fire.translator.util import digits_only, uppercase
+from fire.translator.util import factor_transforms, xform_entity, fire_entity
 
 """
 EXTENSION_OF_TIME_TRANSFORMS

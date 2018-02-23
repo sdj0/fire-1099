@@ -21,10 +21,7 @@ setup(
     packages=find_packages(exclude=['contrib', 'docs', 'tests*', 'spec*']),
     include_package_data=True,
     install_requires=['click', 'jsonschema'],
-    entry_points = '''
-        [console_scripts]
-        fire-1099 = translator.translator:cli
-    ''',
+    scripts=['bin/fire-1099'],
 
     classifiers=[
         'Development Status :: 4 - Alpha',

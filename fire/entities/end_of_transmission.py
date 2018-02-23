@@ -3,8 +3,8 @@ Module: entities.end_of_transmission
 Representation of an "end_of_transmission" record, including transformation
 functions and support functions for conversion into different formats.
 """
-from translator.util import rjust_zero
-from translator.util import factor_transforms, xform_entity, fire_entity
+from fire.translator.util import rjust_zero
+from fire.translator.util import factor_transforms, xform_entity, fire_entity
 
 """
 _END_OF_TRANSMISSION_TRANSFORMS
