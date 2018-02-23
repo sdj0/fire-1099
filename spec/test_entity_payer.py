@@ -13,7 +13,7 @@ from spec_util import check_value_too_long, check_valid_phone_num, \
                       SCHEMA, PAYER_BLANK_MAP, VALID_ALL_DATA, \
                       VALID_PHONE_NUMS, VALID_ZIPS, INVALID_ZIPS, \
                       INVALID_PHONE_NUMS, VALID_TINS, INVALID_TINS
-from entities import payer
+from fire.entities import payer
 
 VALID_PAYER = {}
 VALID_PAYER["payer"] = VALID_ALL_DATA["payer"]

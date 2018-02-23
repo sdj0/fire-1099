@@ -8,8 +8,8 @@ an individual payee)
 """
 from itertools import chain
 
-from translator.util import digits_only, uppercase, rjust_zero
-from translator.util import factor_transforms, xform_entity, fire_entity
+from fire.translator.util import digits_only, uppercase, rjust_zero
+from fire.translator.util import factor_transforms, xform_entity, fire_entity
 """
 _PAYEE_TRANSFORMS
 -----------------------

@@ -5,8 +5,8 @@ and support functions for conversion into different formats.
 """
 from itertools import chain
 
-from translator.util import rjust_zero
-from translator.util import factor_transforms, xform_entity, fire_entity
+from fire.translator.util import rjust_zero
+from fire.translator.util import factor_transforms, xform_entity, fire_entity
 
 """
 _END_OF_PAYER_TRANSFORMS

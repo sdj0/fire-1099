@@ -13,25 +13,20 @@ from time import gmtime, strftime
 from jsonschema import validate
 import click
 
-from translator.util import SequenceGenerator
-from entities import transmitter, payer, payees, end_of_payer, \
-                     end_of_transmission
+from fire.entities import transmitter, payer, payees, end_of_payer, \
+                          end_of_transmission
+from .util import SequenceGenerator
 
 @click.command()
 @click.argument('input_path', type=click.Path(exists=True))
-@click.option('--output', type=click.Path())
-
+@click.option('--output', type=click.Path(),
+              help='system path for the output to be generated')
 def cli(input_path, output):
     """
-    Wrapper and entry point for command line interface.
+    Convert a JSON input file into the format required by IRS Publication 1220
 
-    Parameters
-    ----------
-    input_path : str
-        system path for file containing the user input JSON data
-    output : str
-        optional system path for the output to be generated
-
+    \b
+    input_path: system path for file containing the user input JSON data
     """
     run(input_path, output)
 

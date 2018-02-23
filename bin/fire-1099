@@ -1,0 +1,7 @@
+"""
+Main entrypoint
+"""
+
+from fire.translator import cli
+
+cli()

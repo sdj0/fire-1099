@@ -4,8 +4,8 @@ Module: entities.transmitter
 Representation of a "transmitter" record, including transformation functions
 and support functions for conversion into different formats.
 """
-from translator.util import digits_only, uppercase, rjust_zero
-from translator.util import factor_transforms, xform_entity, fire_entity
+from fire.translator.util import digits_only, uppercase, rjust_zero
+from fire.translator.util import factor_transforms, xform_entity, fire_entity
 
 """
 _TRANSMITTER_TRANSFORMS

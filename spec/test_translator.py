@@ -12,7 +12,7 @@ from spec_util import check_blanks, \
                       END_OF_PAYER_BLANK_MAP, END_OF_TRANSMISSION_BLANK_MAP, \
                       TRANSMITTER_BLANK_MAP, VALID_ALL_DATA, \
                       VALID_ALL_PATH
-from translator import translator
+from fire.translator import translator
 
 # Tests whether a correct input file generates a correct output file
 # Tests whether an output file is defaulted if no path is given

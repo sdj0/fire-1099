@@ -13,7 +13,7 @@ import jsonschema
 from jsonschema import validate
 from nose.tools import raises
 
-SCHEMA = json.load(open("./schema/base_schema.json"))
+SCHEMA = json.load(open("./fire/schema/base_schema.json"))
 VALID_ALL_PATH = "./spec/data/valid_all.json"
 INVALID_PHONE_NUMS = ["+1 555 666 7777", "555 A44 B777", "123ABC5678",
                       "123 45 67", "555 666 777788", "555 666 7777 #"]
