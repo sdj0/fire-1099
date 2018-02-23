@@ -1,7 +1,18 @@
-from nose.tools import *
-from pprint import pprint
+# pylint: disable=missing-docstring, invalid-name
 
-from spec_util import *
+from copy import deepcopy
+
+import jsonschema
+
+from jsonschema import validate
+from nose.tools import raises
+
+from spec_util import check_value_too_long, check_valid_phone_num, \
+                      check_invalid_phone_num, check_valid_tin, \
+                      check_invalid_tin, check_valid_zip, check_invalid_zip, \
+                      SCHEMA, PAYER_BLANK_MAP, VALID_ALL_DATA, \
+                      VALID_PHONE_NUMS, VALID_ZIPS, INVALID_ZIPS, \
+                      INVALID_PHONE_NUMS, VALID_TINS, INVALID_TINS
 from entities import payer
 
 VALID_PAYER = {}
@@ -18,7 +29,7 @@ def test_payer_schema_ignore_extra_data():
 def test_payer_schema_overly_long_values():
     temp = deepcopy(VALID_PAYER)
     for key, value in temp["payer"].items():
-        if type(value) == str:
+        if isinstance(value, str):
             yield check_value_too_long, \
                 temp, ["payer", key], value + 99*"A"
 
@@ -27,7 +38,7 @@ def test_payer_schema_phone_numbers():
     for num in VALID_PHONE_NUMS:
         yield check_valid_phone_num, \
             temp, ["payer", "payer_telephone_number_and_ext"], num
-       
+
     for num in INVALID_PHONE_NUMS:
         yield check_invalid_phone_num, \
             temp, ["payer", "payer_telephone_number_and_ext"], num
@@ -93,7 +104,6 @@ def test_payer_fire_padding_blanks():
     test_string = payer.fire(transformed)
     addr = test_string[133:173]
 
-    pprint(f"Address: {addr}")
     assert addr[0:19] == "1234 ROADSTREET AVE"
     assert addr[19:] == 21*"\x00"
 
@@ -103,7 +113,6 @@ def test_payer_fire_padding_zeros():
     transformed = payer.xform(temp["payer"])
     test_string = payer.fire(transformed)
     sequence_num = test_string[499:507]
-    pprint(sequence_num)
     assert sequence_num == "00000002"
 
 def test_payer_fire_blanks_layout():

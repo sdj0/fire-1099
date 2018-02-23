@@ -5,17 +5,17 @@ required by IRS Publication 1220.
 
 Support notes:
 * 1099-MISC files only.
-* Singly payer only. For multiple payers, use multiple input files. 
+* Singly payer only. For multiple payers, use multiple input files.
 """
 import os.path
 import json
 from time import gmtime, strftime
 from jsonschema import validate
-from pprint import pprint
 import click
 
 from translator.util import SequenceGenerator
-from entities import transmitter, payer, payees, end_of_payer, end_of_transmission
+from entities import transmitter, payer, payees, end_of_payer, \
+                     end_of_transmission
 
 @click.command()
 @click.argument('input_path', type=click.Path(exists=True))
@@ -24,7 +24,7 @@ from entities import transmitter, payer, payees, end_of_payer, end_of_transmissi
 def cli(input_path, output):
     """
     Wrapper and entry point for command line interface.
-    
+
     Parameters
     ----------
     input_path : str
@@ -39,11 +39,11 @@ def run(input_path, output_path):
     """
     Sequentially calls helper functions to fully process :
     * Load user JSON data from input file
-    * Transform user data and merge into a master schema 
+    * Transform user data and merge into a master schema
     * Generate and insert computed values into master
     * Format ASCII string representing user- and system-generated data
-    * Write ASCII string to output file 
-    
+    * Write ASCII string to output file
+
     Parameters
     ----------
     input_path : str
@@ -56,8 +56,9 @@ def run(input_path, output_path):
     schema_path = os.path.join(module_path, '../schema', 'base_schema.json')
     input_dirname = os.path.dirname(os.path.abspath(input_path))
     if output_path is None:
-        output_path = "{}/output_{}".format(input_dirname, 
-            strftime("%Y-%m-%d %H_%M_%S", gmtime()))
+        output_path = "{}/output_{}".format(input_dirname,
+                                            strftime("%Y-%m-%d %H_%M_%S",
+                                                     gmtime()))
 
     user_data = extract_user_data(input_path)
     validate_user_data(user_data, schema_path)
@@ -70,9 +71,9 @@ def run(input_path, output_path):
 
 def extract_user_data(path):
     """
-    Opens file at path specified by input parameter. Reads data as JSON and 
+    Opens file at path specified by input parameter. Reads data as JSON and
     returns a dict containing that JSON data.
-    
+
     Parameters
     ----------
     path : str
@@ -91,7 +92,7 @@ def extract_user_data(path):
 def validate_user_data(data, schema_path):
     """
     Validates data (first param) against the base schema (second param)
-    
+
     Parameters
     ----------
     data : dict
@@ -108,9 +109,9 @@ def validate_user_data(data, schema_path):
 def load_full_schema(data):
     """
     Merges data into the master schema for records, including fields that were
-    not specified in the data originally loaded (such as system-generated fields  
-    and optional fields). 
-    
+    not specified in the data originally loaded (such as system-generated fields
+    and optional fields).
+
     Parameters
     ----------
     data : dict
@@ -137,7 +138,7 @@ def insert_generated_values(data):
     Inserts system-generated values into the appropriate fields. _Note: this
     edits the dict object provided as a parameter in-place._
 
-    Examples of fields inserted: [all]::record_sequence_number, 
+    Examples of fields inserted: [all]::record_sequence_number,
     payer::number_of_payees, transmitter::total_number_of_payees, etc.
 
     Parameters
@@ -154,12 +155,12 @@ def insert_generated_values(data):
 
 def insert_sequence_numbers(data):
     """
-    Inserts sequence numbers into each record, in the following order: 
-    transmitter, payer, payee(s) (each in order supplied by user), 
-    end of payer, end of transmission. 
+    Inserts sequence numbers into each record, in the following order:
+    transmitter, payer, payee(s) (each in order supplied by user),
+    end of payer, end of transmission.
 
     _Note: this edits the input parameter in-place._
-    
+
     Parameters
     ----------
     data : dict
@@ -179,7 +180,7 @@ def insert_sequence_numbers(data):
 def insert_payer_totals(data):
     """
     Inserts requried values into the payer and end_of_payer records. This
-    includes values for the following fields: payment_amount_*, 
+    includes values for the following fields: payment_amount_*,
     amount_codes, number_of_payees, total_number_of_payees, number_of_a_records.
 
     _Note: this edits the input parameter in-place._
@@ -187,11 +188,11 @@ def insert_payer_totals(data):
     Parameters
     ----------
     data : dict
-        Dictionary containing payer, payee, and end_of_payer records, into which 
+        Dictionary containing payer, payee, and end_of_payer records, into which
         computed values will be inserted.
 
     """
-    codes = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", 
+    codes = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D",
              "E", "F", "G"]
     totals = [0 for _ in range(len(codes))]
     payer_code_string = ""
@@ -200,7 +201,7 @@ def insert_payer_totals(data):
         for i, code in enumerate(codes):
             try:
                 totals[i] += int(payee["payment_amount_" + code])
-            except ValueError: 
+            except ValueError:
                 pass
 
     for i, (total, code) in enumerate(zip(totals, codes)):
@@ -215,8 +216,8 @@ def insert_payer_totals(data):
 
 def insert_transmitter_totals(data):
     """
-    Inserts requried values into the transmitter and end_of_transmission 
-    records. This includes values for the following fields: 
+    Inserts requried values into the transmitter and end_of_transmission
+    records. This includes values for the following fields:
     total_number_of_payees, number_of_a_records.
 
     _Note: this edits the input parameter in-place._
@@ -224,7 +225,7 @@ def insert_transmitter_totals(data):
     Parameters
     ----------
     data : dict
-        Dictionary containing transmitter and end_of_transmission records, 
+        Dictionary containing transmitter and end_of_transmission records,
         into which computed values will be inserted.
 
     """
@@ -236,26 +237,26 @@ def insert_transmitter_totals(data):
 
 def get_fire_format(data):
     """
-    Returns the input dictionary converted into the string format required by 
-    the IRS FIRE electronic filing system. It is expceted that the input 
+    Returns the input dictionary converted into the string format required by
+    the IRS FIRE electronic filing system. It is expceted that the input
     dictionary has the following correctly formatted items:
     * transmitter (dict)
     * payer (dict)
     * payees (array of dict objects)
     * end_of_payer (dict)
     * end_of_transmission
-    
+
     Parameters
     ----------
     data : dict
-        Dictionary containing records to be processed into a FIRE-formatted  
+        Dictionary containing records to be processed into a FIRE-formatted
         string.
 
     Returns
     ----------
     str
         FIRE-formatted string containing data provided as the input parameter.
-    
+
     """
     fire_string = ""
 
@@ -264,14 +265,14 @@ def get_fire_format(data):
     fire_string += payees.fire(data["payees"])
     fire_string += end_of_payer.fire(data["end_of_payer"])
     fire_string += end_of_transmission.fire(data["end_of_transmission"])
-    
+
     return fire_string
 
 def write_1099_file(formatted_string, path):
     """
     Writes the given string to a file at the given path. If the file does not
     exist, it will be created.
-    
+
     Parameters
     ----------
     formatted_string : str

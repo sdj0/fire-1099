@@ -9,7 +9,7 @@ from translator.util import factor_transforms, xform_entity, fire_entity
 """
 EXTENSION_OF_TIME_TRANSFORMS
 -----------------------
-Stores metadata associated with each field in an Extension of Time record. 
+Stores metadata associated with each field in an Extension of Time record.
 Values in key-value pairs represent metadata in the following format:
 
 (default value, length, fill character, transformation function)
@@ -42,7 +42,7 @@ def xform(data):
     Parameters
     ----------
     data : dict
-        Expects data parameter to have keys that exist in the 
+        Expects data parameter to have keys that exist in the
         EXTENSION_OF_TIME_TRANSFORMS dict.
 
     Returns
@@ -69,5 +69,5 @@ def fire(data):
     str
         String formatted to meet IRS Publication 1220
     """
-    return fire_entity(_EXTENSION_OF_TIME_TRANSFORMS, 
+    return fire_entity(_EXTENSION_OF_TIME_TRANSFORMS,
                        _EXTENSION_OF_TIME_SORT, data, 200)

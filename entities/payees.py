@@ -73,7 +73,7 @@ def xform(data):
     ----------
     data : array[dict]
         Array of dict elements containing Payee data.
-        Expects element of the array to have keys that exist in the 
+        Expects element of the array to have keys that exist in the
         _PAYEE_TRANSFORMS dict (not required to have all keys).
 
     Returns
@@ -106,5 +106,3 @@ def fire(data):
     for payee in data:
         payees_string += fire_entity(_PAYEE_TRANSFORMS, _PAYEE_SORT, payee)
     return payees_string
-
-

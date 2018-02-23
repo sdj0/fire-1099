@@ -1,23 +1,28 @@
 """
 Utility functions used in test specs.
 """
-import jsonschema
-from jsonschema import validate
+
+# pylint: disable=missing-docstring
+
 import json
 
 from copy import deepcopy
-from nose.tools import *
+
+import jsonschema
+
+from jsonschema import validate
+from nose.tools import raises
 
 SCHEMA = json.load(open("./schema/base_schema.json"))
 VALID_ALL_PATH = "./spec/data/valid_all.json"
 INVALID_PHONE_NUMS = ["+1 555 666 7777", "555 A44 B777", "123ABC5678",
                       "123 45 67", "555 666 777788", "555 666 7777 #"]
-VALID_PHONE_NUMS = ["5556667777", "555-666-7777", "(555)666-7777", 
-                    "(555) 666 7777", "555.666.7777", "(555)-666-7777", 
+VALID_PHONE_NUMS = ["5556667777", "555-666-7777", "(555)666-7777",
+                    "(555) 666 7777", "555.666.7777", "(555)-666-7777",
                     "(555) 666-7777"]
-VALID_TINS = ["12-1234567", "121234567", "12 1234567", 
+VALID_TINS = ["12-1234567", "121234567", "12 1234567",
               "111-11-1111", "222 22 2222"]
-INVALID_TINS = ["12-12345678", "12-123456", "12-12345-6", "12-ABCDEFG", 
+INVALID_TINS = ["12-12345678", "12-123456", "12-12345-6", "12-ABCDEFG",
                 "111-1-1111", "111-111-111", "1111-11-1111"]
 
 VALID_EMAILS = ["ASDF@asdf.com", "test@test.test.test", "abc1234_234@a.ccc"]
@@ -127,12 +132,11 @@ def check_invalid_phone_num(dict_obj, path, num):
 def check_valid_phone_num(dict_obj, path, num):
     temp_obj = dive_to_path(dict_obj, path, num)
     assert validate(temp_obj, SCHEMA) is None, \
-        print(f"Phone number: {num}, Object: {dict_obj}")
+        f"Phone number: {num}, Object: {dict_obj}"
 
 def check_valid_tin(dict_obj, path, tin):
-    temp_obj = dive_to_path(dict_obj, path, tin)
-    assert validate(dict_obj, SCHEMA) is None, \
-        print(f"TIN: {tin}, Object: {dict_obj}")
+    dive_to_path(dict_obj, path, tin)
+    assert validate(dict_obj, SCHEMA) is None, f"TIN: {tin}, Object: {dict_obj}"
 
 @raises(jsonschema.exceptions.ValidationError)
 def check_invalid_tin(dict_obj, path, tin):
@@ -140,9 +144,9 @@ def check_invalid_tin(dict_obj, path, tin):
     validate(temp_obj, SCHEMA)
 
 def check_valid_email(dict_obj, path, email):
-    temp_obj = dive_to_path(dict_obj, path, email)
+    dive_to_path(dict_obj, path, email)
     assert validate(dict_obj, SCHEMA) is None, \
-        print(f"Email: {email}, Object: {dict_obj}")
+        f"Email: {email}, Object: {dict_obj}"
 
 @raises(jsonschema.exceptions.ValidationError)
 def check_invalid_email(dict_obj, path, email):
@@ -150,9 +154,9 @@ def check_invalid_email(dict_obj, path, email):
     validate(temp_obj, SCHEMA)
 
 def check_valid_zip(dict_obj, path, zip_code):
-    temp_obj = dive_to_path(dict_obj, path, zip_code)
+    dive_to_path(dict_obj, path, zip_code)
     assert validate(dict_obj, SCHEMA) is None, \
-        print(f"Zip Code: {zip_code}, Object: {dict_obj}")
+        f"Zip Code: {zip_code}, Object: {dict_obj}"
 
 @raises(jsonschema.exceptions.ValidationError)
 def check_invalid_zip(dict_obj, path, zip_code):
@@ -160,12 +164,11 @@ def check_invalid_zip(dict_obj, path, zip_code):
     validate(temp_obj, SCHEMA)
 
 def check_valid_amount(dict_obj, path, dollar_amount):
-    temp_obj = dive_to_path(dict_obj, path, dollar_amount)
+    dive_to_path(dict_obj, path, dollar_amount)
     assert validate(dict_obj, SCHEMA) is None, \
-        print(f"Dollar Amount: {dollar_amount}, Object: {dict_obj}")
+        f"Dollar Amount: {dollar_amount}, Object: {dict_obj}"
 
 @raises(jsonschema.exceptions.ValidationError)
 def check_invalid_amount(dict_obj, path, dollar_amount):
     temp_obj = dive_to_path(dict_obj, path, dollar_amount)
     validate(temp_obj, SCHEMA)
-

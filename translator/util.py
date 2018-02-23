@@ -1,6 +1,6 @@
 """
 Module: Util
-Defines a set of classes and functions shared by other modules within 
+Defines a set of classes and functions shared by other modules within
 the fire-1099 application.
 """
 import re
@@ -8,8 +8,8 @@ import re
 # SequenceGenerator: generates sequential integer numbers
 class SequenceGenerator:
     """
-    Generates sequence nubmers via the get_next() method. Not intended for use 
-    in concurrent applications, as increment and string formatting operations 
+    Generates sequence nubmers via the get_next() method. Not intended for use
+    in concurrent applications, as increment and string formatting operations
     (as well as return) are not executed atomically.
 
     Attributes
@@ -25,10 +25,10 @@ class SequenceGenerator:
     """
     def __init__(self):
         self.counter = 0
-    
+
     def get_next(self):
         """
-        Returns the next sequence number, formatted as a string according to 
+        Returns the next sequence number, formatted as a string according to
         IRS Publication 1220.
 
         Returns
@@ -55,7 +55,7 @@ class SequenceGenerator:
 
 def xform_entity(entity_dict, data):
     """
-    Applies transformation functions specified by the entity dictionary (first 
+    Applies transformation functions specified by the entity dictionary (first
     param) to the user-supplied data (second param). If no user data is
     supplied for the given field in the entity dictionary, then the default
     value for the field is supplied.
@@ -63,8 +63,8 @@ def xform_entity(entity_dict, data):
     Parameters
     ----------
     entity_dict: dict
-        Dictionary containing all fields required for the type of record 
-        in question. Expected format of this dict is {"key": (value)} where 
+        Dictionary containing all fields required for the type of record
+        in question. Expected format of this dict is {"key": (value)} where
         value is a tuple in the following format:
 
         (default value, length, fill character, transformation function)
@@ -75,7 +75,7 @@ def xform_entity(entity_dict, data):
 
     Returns
     ----------
-    dict    
+    dict
         Dictionary containing all fields specified in parameter "entity_dict",
         with transformed values from parameter "data" or defaults.
 
@@ -98,14 +98,14 @@ def fire_entity(entity_dict, key_ordering, data, expected_length=750):
     Parameters
     ----------
     entity_dict: dict
-        Dictionary containing all fields required for the type of record 
+        Dictionary containing all fields required for the type of record
         in question. Expected format of this dict is {"key": (value)} where
         value is a tuple in the following format:
 
         (default value, length, fill character, transformation function)
 
     data: dict
-        Data to be transformed and inserted into the returned dict. 
+        Data to be transformed and inserted into the returned dict.
         All keys in this dict are expected to be present in entity_dict.
 
     Returns
@@ -140,19 +140,23 @@ The functions below facilitate transformations that are similar across
 different fields and entities.
 """
 
-"""
-digits_only(str): Removes all non-digit characters"""
+
 def digits_only(value):
+    """
+    Removes all non-digit characters
+    """
     return re.sub("[^0-9]*", "", value)
 
-"""
-uppercase(str): returns the string with all alpha characters in uppercase"""
 def uppercase(value):
+    """
+    Returns the string with all alpha characters in uppercase
+    """
     return value.upper()
 
-"""
-rjust_zer(str, int): right-justifies *value* and pads with zeros to *length*"""
 def rjust_zero(value, length):
+    """
+    right-justifies *value* and pads with zeros to *length*
+    """
     return f"{digits_only(value):0>{length}}"
 
 def factor_transforms(transforms):
