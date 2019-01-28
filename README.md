@@ -27,7 +27,7 @@ As an alternative to the CLI, the `translator` module exposes a number of functi
 
 To run the file generation process end-to-end (similar to using the CLI), use `translator.run(str, str)`. Example:
 
-```
+```python
 import translator
 
 input_path = "/path/to/input_file.json"
@@ -39,7 +39,7 @@ translator.run(input_path, output_path)
 
 A more step-by-step interaction is also available:
 
-```
+```python
 import translator
 
 input_path = "/path/to/input_file.json"
