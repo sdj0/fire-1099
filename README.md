@@ -1,7 +1,9 @@
 # What this is
-Fire-1099 helps you generate 1099 tax filings formatted for the IRS electronic filing system.
+Fire-1099 helps you stop wasting ~$10 per page on 1099 filings. 
 
-A lot of small companies don't realize they have to file 1099s for most payments to lawyers, as well as independent contractors. The IRS has a system called "FIRE" for electronically submitting these filings, and others like stock options exercise forms. These filings can *only* be filed through this system. If you're used to modern REST APIs, you'll probably find FIRE hard to use. It's inflexible, has an ambiguous spec, and operates on the byte (ASCII code) level. 
+Specifically, it generates 1099 tax filings formatted for the IRS electronic filing system.
+
+A lot of small companies don't realize they have to file 1099s for most payments to lawyers, as well as independent contractors. The IRS has a system called "FIRE" for electronically submitting these filings, and others like stock options exercise forms. These filings can *only* be filed through this system. If you're used to modern REST APIs, you'll probably find FIRE unpleasant to use. It's inflexible, has an ambiguous spec, and operates on the byte (ASCII code) level. 
 
 With fire-1099, you simply enter your form data in a JSON file [like this one](https://github.com/djeserkare/fire-1099/blob/master/spec/data/valid_minimal.json) and run it through the program. It validates your data against the IRS spec, auto-formats it where possible, and writes it to a file that can be uploaded straight to FIRE.
 
