@@ -62,7 +62,7 @@ write_1099_file(ascii_string, output_path)
 # Access via IRS FIRE System
 A few things need to happen before you can submit an output file to the IRS:
 
-* You need a *Transmitter Control Code* or "TCC." To get one, you unfortunately have to mail or fax [this form](https://www.irs.gov/pub/irs-pdf/f4419.pdf). It can take a couple weeks to get a response.
+* You need a *Transmitter Control Code* or "TCC." This is done by filing From 4419 electronically (https://fire.irs.gov). It can take 45 days to get a response.
 * You need to have a valid business tax identification code (EIN/TIN). This will be linked to your TCC, and is what you'll use for the "transmitter" record in your FIRE submissions.
 
 # Future Work
