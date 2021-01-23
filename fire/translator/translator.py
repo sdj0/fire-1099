@@ -4,7 +4,7 @@ Processes user-provided JSON file into an output file in the format
 required by IRS Publication 1220.
 
 Support notes:
-* 1099-MISC files only.
+* 1099-MISC and 1099-NEC files only.
 * Singly payer only. For multiple payers, use multiple input files.
 """
 import os.path
