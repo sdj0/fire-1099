@@ -16,7 +16,8 @@ The CLI for generating FIRE-formatted files accepts three basic parameters: an i
 
 
 `fire-1099 path/to/input-file.json --output path/to/output-file.ascii`
-`fire-1099 path/to/input-nec-file.json --output path/to/output-nec-file.ascii` --type NEC
+
+`fire-1099 path/to/input-nec-file.json --output path/to/output-nec-file.ascii --type NEC`
 
 
 The input file should be JSON-formatted according to the schema defined in the `/schema` folder of this repo. The output file given by `--output` is optional, and will default to a timestamped filename in the same directory as the input file. Not all fields in the input file are required. I recommend using the file `/spec/data/valid-minimal.json` as a starting point if you're not comfortable with the schema file itself.
