@@ -13,24 +13,27 @@ from time import gmtime, strftime
 from jsonschema import validate
 import click
 
-from fire.entities import transmitter, payer, payees, end_of_payer, \
-                          end_of_transmission
+from fire.entities import transmitter, payer, payees, end_of_payer, end_of_transmission
 from .util import SequenceGenerator
 
+
 @click.command()
-@click.argument('input_path', type=click.Path(exists=True))
-@click.option('--output', type=click.Path(),
-              help='system path for the output to be generated')
-def cli(input_path, output):
+@click.argument("input_path", type=click.Path(exists=True))
+@click.option(
+    "--output", type=click.Path(), help="system path for the output to be generated"
+)
+@click.option("--type", "-t", help="NEC or MISC")
+def cli(input_path, output, type="MISC"):
     """
     Convert a JSON input file into the format required by IRS Publication 1220
 
     \b
     input_path: system path for file containing the user input JSON data
     """
-    run(input_path, output)
+    run(input_path, output, type)
 
-def run(input_path, output_path):
+
+def run(input_path, output_path, type="MISC"):
     """
     Sequentially calls helper functions to fully process :
     * Load user JSON data from input file
@@ -48,12 +51,16 @@ def run(input_path, output_path):
 
     """
     module_path = os.path.split(os.path.realpath(__file__))[0]
-    schema_path = os.path.join(module_path, '../schema', 'base_schema.json')
+    schema_path = os.path.join(
+        module_path,
+        "../schema",
+        "1099_MISC_schema.json" if type == "MISC" else "1099_NEC_schema.json",
+    )
     input_dirname = os.path.dirname(os.path.abspath(input_path))
     if output_path is None:
-        output_path = "{}/output_{}".format(input_dirname,
-                                            strftime("%Y-%m-%d %H_%M_%S",
-                                                     gmtime()))
+        output_path = "{}/output_{}".format(
+            input_dirname, strftime("%Y-%m-%d %H_%M_%S", gmtime())
+        )
 
     user_data = extract_user_data(input_path)
     validate_user_data(user_data, schema_path)
@@ -63,6 +70,7 @@ def run(input_path, output_path):
 
     ascii_string = get_fire_format(master)
     write_1099_file(ascii_string, output_path)
+
 
 def extract_user_data(path):
     """
@@ -80,9 +88,10 @@ def extract_user_data(path):
         JSON data loaded from file at input path
     """
     user_data = {}
-    with open(path, mode='r', encoding='utf-8') as file:
+    with open(path, mode="r", encoding="utf-8") as file:
         user_data = json.load(file)
     return user_data
+
 
 def validate_user_data(data, schema_path):
     """
@@ -97,9 +106,10 @@ def validate_user_data(data, schema_path):
         system path for file containing schema to data validate against
 
     """
-    with open(schema_path, mode='r', encoding='utf-8') as schema:
+    with open(schema_path, mode="r", encoding="utf-8") as schema:
         schema = json.load(schema)
         validate(data, schema)
+
 
 def load_full_schema(data):
     """
@@ -118,8 +128,13 @@ def load_full_schema(data):
         Master schema with all fields provided in input parameter included
 
     """
-    merged_data = {"transmitter": "", "payer": "", "payees": [],
-                   "end_of_payer": "", "end_of_transmission": ""}
+    merged_data = {
+        "transmitter": "",
+        "payer": "",
+        "payees": [],
+        "end_of_payer": "",
+        "end_of_transmission": "",
+    }
     merged_data["transmitter"] = transmitter.xform(data["transmitter"])
     merged_data["payer"] = payer.xform(data["payer"])
     merged_data["payees"] = payees.xform(data["payees"])
@@ -127,6 +142,7 @@ def load_full_schema(data):
     merged_data["end_of_transmission"] = end_of_transmission.xform({})
 
     return merged_data
+
 
 def insert_generated_values(data):
     """
@@ -147,6 +163,7 @@ def insert_generated_values(data):
     insert_sequence_numbers(data)
     insert_payer_totals(data)
     insert_transmitter_totals(data)
+
 
 def insert_sequence_numbers(data):
     """
@@ -172,6 +189,7 @@ def insert_sequence_numbers(data):
     data["end_of_payer"]["record_sequence_number"] = seq.get_next()
     data["end_of_transmission"]["record_sequence_number"] = seq.get_next()
 
+
 def insert_payer_totals(data):
     """
     Inserts requried values into the payer and end_of_payer records. This
@@ -187,8 +205,24 @@ def insert_payer_totals(data):
         computed values will be inserted.
 
     """
-    codes = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D",
-             "E", "F", "G"]
+    codes = [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+    ]
     totals = [0 for _ in range(len(codes))]
     payer_code_string = ""
 
@@ -208,6 +242,7 @@ def insert_payer_totals(data):
     payee_count = len(data["payees"])
     data["payer"]["number_of_payees"] = f"{payee_count:0>8}"
     data["end_of_payer"]["number_of_payees"] = f"{payee_count:0>8}"
+
 
 def insert_transmitter_totals(data):
     """
@@ -229,6 +264,7 @@ def insert_transmitter_totals(data):
     data["end_of_transmission"]["total_number_of_payees"] = f"{payee_count:0>8}"
     # Force number of A records to "1" as only one payer is supported
     data["end_of_transmission"]["number_of_a_records"] = "00000001"
+
 
 def get_fire_format(data):
     """
@@ -263,6 +299,7 @@ def get_fire_format(data):
 
     return fire_string
 
+
 def write_1099_file(formatted_string, path):
     """
     Writes the given string to a file at the given path. If the file does not
@@ -277,6 +314,6 @@ def write_1099_file(formatted_string, path):
         Path of file to be written.
 
     """
-    file = open(path, mode='w+')
+    file = open(path, mode="w+")
     file.write(formatted_string)
     file.close()
