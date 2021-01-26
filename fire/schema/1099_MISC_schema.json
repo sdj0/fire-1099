@@ -1,0 +1,221 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "description": "A schema for validating 1099 MISC data formatted according to IRS Publication 1220.",
+    "type": "object",
+    "properties":{
+        "transmitter":{
+            "type": "object",
+            "properties": {
+                "record_type": {"type": "string", "maxLength": 1},
+                "payment_year": {"$ref": "#/definitions/year"},
+                "prior_year_data_indicator": {"type": "string", "maxLength": 1},
+                "transmitter_tin": {"$ref": "#/definitions/tin"},
+                "transmitter_control_code": {"$ref": "#/definitions/transmitter_control_code"},
+                "test_file_indicator": {"type": "string", "maxLength": 1},
+                "foreign_entity_indicator": {"type": "string", "maxLength": 1}, 
+                "transmitter_name": {"$ref": "#/definitions/generic_name"},
+                "transmitter_name_contd": {"$ref": "#/definitions/generic_name"},
+                "company_name": {"$ref": "#/definitions/generic_name"},
+                "company_name_contd": {"$ref": "#/definitions/generic_name"},
+                "company_mailing_address": {"$ref": "#/definitions/address"},
+                "company_city": {"$ref": "#/definitions/city"},
+                "company_state": {"$ref": "#/definitions/state"},
+                "company_zip_code": {"$ref": "#/definitions/zip_code"},
+                "total_number_of_payees": {"type": "string", "maxLength": 8},
+                "contact_name": {"$ref": "#/definitions/generic_name"},
+                "contact_telephone_number_and_ext": {"$ref": "#/definitions/phone"},
+                "contact_email_address": {"$ref": "#/definitions/email"},
+                "record_sequence_number": {"type": "string", "maxLength": 8},
+                "vendor_indicator": {"type": "string", "maxLength": 1},
+                "vendor_name": {"$ref": "#/definitions/generic_name"},
+                "vendor_mailing_address": {"$ref": "#/definitions/address"},
+                "vendor_city": {"$ref": "#/definitions/city"},
+                "vendor_state": {"$ref": "#/definitions/state"},
+                "vendor_zip_code": {"$ref": "#/definitions/zip_code"},
+                "vendor_contact_name": {"$ref": "#/definitions/generic_name"},
+                "vendor_contact_telephone_and_ext": {"$ref": "#/definitions/phone"},
+                "vendor_foreign_entity_indicator": {"type": "string", "maxLength": 1} 
+            },
+            "required":["transmitter_name", "company_name", "company_mailing_address", 
+                        "company_city", "company_state", "company_zip_code", "transmitter_tin", 
+                        "transmitter_control_code", "contact_name", 
+                        "contact_telephone_number_and_ext", "contact_email_address", 
+                        "payment_year"]
+        },
+        "payer":{
+            "type:":"object",
+            "properties":{
+                "record_type": {"type": "string", "maxLength": 1},
+                "payment_year": {"$ref": "#/definitions/year"},
+                "combined_fed_state": {"type": "string", "maxLength": 1, "pattern": "^[1]?$"},
+                "payer_tin": {"$ref": "#/definitions/tin"},
+                "payer_name_control": {"type": "string", "maxLength": 4},
+                "last_filing_indicator": {"type": "string", "maxLength": 1, "pattern": "^[1]?$"},
+                "type_of_return": {"type": "string", "maxLength": 2},
+                "amount_codes": {"type": "string", "maxLength": 16},
+                "foreign_entity_indicator": {"type": "string", "maxLength": 1},
+                "first_payer_name": {"$ref": "#/definitions/generic_name"},
+                "second_payer_name": {"$ref": "#/definitions/generic_name"},
+                "transfer_agent_control": {"type": "string", "maxLength": 1},
+                "payer_shipping_address": {"$ref": "#/definitions/address"},
+                "payer_city": {"$ref": "#/definitions/city"},
+                "payer_state": {"$ref": "#/definitions/state"},
+                "payer_zip_code": {"$ref": "#/definitions/zip_code"},
+                "payer_telephone_number_and_ext": {"$ref": "#/definitions/phone"},
+                "record_sequence_number": {"type": "string", "maxLength": 8}
+            },
+            "required":[
+                "first_payer_name", "payment_year", "payer_shipping_address", "payer_city",
+                "payer_state", "payer_zip_code", "payer_tin", "payer_name_control",
+                "payer_telephone_number_and_ext"
+            ]
+        },
+        "payees":{
+            "type":"array",
+            "items":{
+                "type": "object",
+                "properties": {
+                    "record_type": {"type": "string", "maxLength": 1},
+                    "payment_year": {"$ref": "#/definitions/year"},
+                    "corrected_return_indicator": {"type": "string", "maxLength": 1},
+                    "payees_name_control": {"type": "string", "maxLength": 4},
+                    "type_of_tin": {"type": "string", "maxLength": 1},
+                    "payees_tin": {"$ref": "#/definitions/tin"},
+                    "payers_account_number_for_payee": {"type": "string", "maxLength": 20},
+                    "payers_office_code": {"type": "string", "maxLength": 4},
+                    "payment_amount_1": {"$ref": "#/definitions/dollar_amount"},
+                    "payment_amount_2": {"$ref": "#/definitions/dollar_amount"},
+                    "payment_amount_3": {"$ref": "#/definitions/dollar_amount"},
+                    "payment_amount_4": {"$ref": "#/definitions/dollar_amount"},
+                    "payment_amount_5": {"$ref": "#/definitions/dollar_amount"},
+                    "payment_amount_6": {"$ref": "#/definitions/dollar_amount"},
+                    "payment_amount_7": {"$ref": "#/definitions/dollar_amount"},
+                    "payment_amount_8": {"$ref": "#/definitions/dollar_amount"},
+                    "payment_amount_9": {"$ref": "#/definitions/dollar_amount"},
+                    "payment_amount_A": {"$ref": "#/definitions/dollar_amount"},
+                    "payment_amount_B": {"$ref": "#/definitions/dollar_amount"},
+                    "payment_amount_C": {"$ref": "#/definitions/dollar_amount"},
+                    "payment_amount_D": {"$ref": "#/definitions/dollar_amount"},
+                    "payment_amount_E": {"$ref": "#/definitions/dollar_amount"},
+                    "payment_amount_F": {"$ref": "#/definitions/dollar_amount"},
+                    "payment_amount_G": {"$ref": "#/definitions/dollar_amount"},
+                    "foreign_country_indicator": {"type": "string", "maxLength": 1},
+                    "first_payee_name_line": {"$ref": "#/definitions/generic_name"},
+                    "second_payee_name_line": {"$ref": "#/definitions/generic_name"},
+                    "payee_mailing_address": {"$ref": "#/definitions/address"},
+                    "payee_city": {"$ref": "#/definitions/city"},
+                    "payee_state": {"$ref": "#/definitions/state"},
+                    "payee_zip_code": {"$ref": "#/definitions/zip_code"},
+                    "record_sequence_number": {"type": "string", "maxLength": 8},
+                    "second_tin_notice": {"type": "string", "maxLength": 1},
+                    "direct_sales_indicator": {"type": "string", "maxLength": 1},
+                    "fatca_filing_requirement_indicator": {"type": "string", "maxLength": 1},
+                    "special_data_entries": {"type": "string", "maxLength": 60},
+                    "state_income_tax_withheld": {"type": "string", "maxLength": 12},
+                    "local_income_tax_withheld": {"type": "string", "maxLength": 12},
+                    "combined_federal_state_code": {"type": "string", "maxLength": 2}
+                },
+                "required":[
+                    "first_payee_name_line", "payees_name_control", "payment_year",
+                    "payee_mailing_address", "payee_city", "payee_state",
+                    "payee_zip_code", "payees_tin", "payment_amount_7"
+                ]
+            }
+        },
+        "end_of_payer":{
+            "type": "object",
+            "properties":{
+                "record_type": {"type": "string", "maxLength": 1},
+                "number_of_payees": {"type": "string", "maxLength": 8},
+                "payment_amount_1": {"$ref": "#/definitions/dollar_amount"},
+                "payment_amount_2": {"$ref": "#/definitions/dollar_amount"},
+                "payment_amount_3": {"$ref": "#/definitions/dollar_amount"},
+                "payment_amount_4": {"$ref": "#/definitions/dollar_amount"},
+                "payment_amount_5": {"$ref": "#/definitions/dollar_amount"},
+                "payment_amount_6": {"$ref": "#/definitions/dollar_amount"},
+                "payment_amount_7": {"$ref": "#/definitions/dollar_amount"},
+                "payment_amount_8": {"$ref": "#/definitions/dollar_amount"},
+                "payment_amount_9": {"$ref": "#/definitions/dollar_amount"},
+                "payment_amount_A": {"$ref": "#/definitions/dollar_amount"},
+                "payment_amount_B": {"$ref": "#/definitions/dollar_amount"},
+                "payment_amount_C": {"$ref": "#/definitions/dollar_amount"},
+                "payment_amount_D": {"$ref": "#/definitions/dollar_amount"},
+                "payment_amount_E": {"$ref": "#/definitions/dollar_amount"},
+                "payment_amount_F": {"$ref": "#/definitions/dollar_amount"},
+                "payment_amount_G": {"$ref": "#/definitions/dollar_amount"},
+                "record_sequence_number": {"type": "string", "maxLength": 8}
+            } 
+        },
+        "end_of_transmission":{
+            "type": "object",
+            "properties":{
+                "record_type": {"type": "string", "maxLength": 1},
+                "number_of_a_records": {"type": "string", "maxLength": 8},
+                "total_number_of_payees": {"type": "string", "maxLength": 8},
+                "record_sequence_number": {"type": "string", "maxLength": 8}
+            }
+        }
+    },
+    "definitions":{
+        "tin":{
+            "type":"string",
+            "pattern":"(^[0-9]{2}[ -]?[0-9]{7}$)|(^[0-9]{3}[ -]?[0-9]{2}[ -]?[0-9]{4}$)"
+        },
+        "state":{
+            "type":"string",
+            "pattern":"^[a-zA-Z]{2}$"
+        },
+        "zip_code":{
+            "type:":"string",
+            "pattern":"^[0-9]{5}(-[0-9]{4})?$"
+        },
+        "email":{
+            "type":"string",
+            "maxLength": 50,
+            "pattern": "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$"
+        },
+        "address":{
+            "type": "string", 
+            "maxLength": 40
+        },
+        "city":{
+            "type": "string", 
+            "maxLength": 40
+        },
+        "phone":{
+            "type": "string",
+            "pattern": "^\\(?[0-9]{3}\\)?[ .-]?[0-9]{3}[ .-]?[0-9]{4}$"
+        },
+        "year":{
+            "type": "string",
+            "pattern":"^[0-9]{4}",
+            "maxLength": 4
+        },
+       "generic_name":{
+            "type": "string", 
+            "maxLength": 40
+        },
+        "name_control":{
+            "type": "string",
+            "minLength": 4,
+            "maxLength": 4
+        },
+        "dollar_amount":{
+            "type": "string",
+            "pattern": "^[\\$]?[0-9,]*\\.?[0-9]{2}$"
+        },
+        "foreign_entity": {
+            "type": "string",
+            "pattern": "^1?$"
+        },
+        "transmitter_control_code": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9]{5}$",
+            "maxLength": 5
+        }
+    },
+    "additional_properties": false
+}
+
+
+
