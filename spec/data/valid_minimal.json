@@ -28,7 +28,7 @@
 	},
 	"payees":[
 		{
-			"payee_name":"SPACELEY SPROCKETS",
+			"first_payee_name_line":"SPACELEY SPROCKETS",
 			"payees_name_control":"SPAC",
 			"payment_year":"2017",
 			"payee_mailing_address":"5678 INDUSTRY PLACE",
@@ -37,10 +37,10 @@
 			"payee_zip_code":"22222",
 			"payees_tin":"987654321",
 			"phone":"5555555555",
-			"payment_amount_7":"10000"
+			"payment_amount_1":"10000"
 		},
 		{
-			"payee_name":"BOB LOBLAW LLP",
+			"first_payee_name_line":"BOB LOBLAW LLP",
 			"payees_name_control":"BOBL",
 			"payment_year":"2017",
 			"payee_mailing_address":"100 LAWBOMB RD",
@@ -49,7 +49,7 @@
 			"payee_zip_code":"11111",
 			"payees_tin":"098765432",
 			"phone":"5556667777",
-			"payment_amount_7":"5000"
+			"payment_amount_1":"5000"
 		}
 	]	
 }
