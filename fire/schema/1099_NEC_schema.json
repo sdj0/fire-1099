@@ -84,7 +84,6 @@
                     "payers_account_number_for_payee": {"type": "string", "maxLength": 20},
                     "payers_office_code": {"type": "string", "maxLength": 4},
                     "payment_amount_1": {"$ref": "#/definitions/dollar_amount"},
-                    "payment_amount_4": {"$ref": "#/definitions/dollar_amount"},
                     "foreign_country_indicator": {"type": "string", "maxLength": 1},
                     "first_payee_name_line": {"$ref": "#/definitions/generic_name"},
                     "second_payee_name_line": {"$ref": "#/definitions/generic_name"},
@@ -95,8 +94,6 @@
                     "record_sequence_number": {"type": "string", "maxLength": 8},
                     "second_tin_notice": {"type": "string", "maxLength": 1},
                     "direct_sales_indicator": {"type": "string", "maxLength": 1},
-                    "fatca_filing_requirement_indicator": {"type": "string", "maxLength": 1},
-                    "special_data_entries": {"type": "string", "maxLength": 60},
                     "state_income_tax_withheld": {"type": "string", "maxLength": 12},
                     "local_income_tax_withheld": {"type": "string", "maxLength": 12},
                     "combined_federal_state_code": {"type": "string", "maxLength": 2}
@@ -114,7 +111,6 @@
                 "record_type": {"type": "string", "maxLength": 1},
                 "number_of_payees": {"type": "string", "maxLength": 8},
                 "payment_amount_1": {"$ref": "#/definitions/dollar_amount"},
-                "payment_amount_4": {"$ref": "#/definitions/dollar_amount"},
                 "record_sequence_number": {"type": "string", "maxLength": 8}
             }
         },
@@ -163,7 +159,7 @@
             "pattern":"^[0-9]{4}",
             "maxLength": 4
         },
-       "generic_name":{
+        "generic_name":{
             "type": "string",
             "maxLength": 40
         },

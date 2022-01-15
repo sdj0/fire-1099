@@ -222,6 +222,8 @@ def insert_payer_totals(data):
         "E",
         "F",
         "G",
+        "H",
+        "J"
     ]
     totals = [0 for _ in range(len(codes))]
     payer_code_string = ""
