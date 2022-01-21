@@ -24,12 +24,13 @@ _ITEMS = [
 ]
 
 for field in chain((x for x in range(1, 10)), \
-                   (chr(x) for x in range(ord('A'), ord('H')))):
+                   (chr(x) for x in range(ord('A'), ord('I'))), \
+                   'J'):
     _ITEMS.append((f"payment_amount_{field}",
                    (18*"0", 18, "0", lambda x: rjust_zero(x, 18))))
 
 _ITEMS += [
-    ("blank_2", ("", 196, "\x00", lambda x: x)),
+    ("blank_2", ("", 160, "\x00", lambda x: x)),
     ("record_sequence_number", ("", 8, "0", lambda x: x)),
     ("blank_3", ("", 241, "\x00", lambda x: x)),
     ("blank_4", ("", 2, "\x00", lambda x: x))
