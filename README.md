@@ -5,7 +5,7 @@ Specifically, it generates 1099 tax filings formatted for the IRS electronic fil
 
 A lot of small companies don't realize they have to file 1099s for most payments to lawyers, as well as independent contractors. The IRS has a system called "FIRE" for electronically submitting these filings, and others like stock options exercise forms. These filings can *only* be filed through this system. If you're used to modern REST APIs, you'll probably find FIRE unpleasant to use. It's inflexible, has an ambiguous spec, and operates on the byte (ASCII code) level.
 
-With fire-1099, you simply enter your form data in a JSON file [like this one](https://github.com/djeserkare/fire-1099/blob/master/spec/data/valid_minimal.json) and run it through the program. It validates your data against the IRS spec, auto-formats it where possible, and writes it to a file that can be uploaded straight to FIRE.
+With fire-1099, you simply enter your form data in a JSON file [like this one](https://github.com/sdj0/fire-1099/blob/master/spec/data/valid_minimal_MISC.json) and run it through the program. It validates your data against the IRS spec, auto-formats it where possible, and writes it to a file that can be uploaded straight to FIRE.
 
 I should point out getting access to the FIRE system is non-trivial; it can take a couple of weeks. See below for a link to the form needed.
 
