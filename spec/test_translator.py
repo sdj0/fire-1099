@@ -87,7 +87,7 @@ def test_translator_insert_payer_totals():
     translator.insert_payer_totals(data)
 
     # Test payer record
-    assert data["payer"]["amount_codes"] == "123456789ABCDEFG"
+    assert data["payer"]["amount_codes"] == "123456789ABCDEFGHJ"
     assert data["payer"]["number_of_payees"] == "00000002"
 
     # Test end_of_payer record

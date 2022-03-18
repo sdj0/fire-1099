@@ -15,6 +15,7 @@ import click
 
 from fire.entities import transmitter, payer, payees, end_of_payer, end_of_transmission
 from .util import SequenceGenerator
+from . import global_vars
 
 
 @click.command()
@@ -23,17 +24,18 @@ from .util import SequenceGenerator
     "--output", type=click.Path(), help="system path for the output to be generated"
 )
 @click.option("--type", "-t", help="NEC or MISC")
-def cli(input_path, output, type="MISC"):
+def cli(input_path, output, type):
     """
     Convert a JSON input file into the format required by IRS Publication 1220
 
     \b
     input_path: system path for file containing the user input JSON data
     """
-    run(input_path, output, type)
+    global_vars.format_type = type
+    run(input_path, output, global_vars.format_type)
 
 
-def run(input_path, output_path, type="MISC"):
+def run(input_path, output_path, type):
     """
     Sequentially calls helper functions to fully process :
     * Load user JSON data from input file
@@ -205,26 +207,11 @@ def insert_payer_totals(data):
         computed values will be inserted.
 
     """
-    codes = [
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "A",
-        "B",
-        "C",
-        "D",
-        "E",
-        "F",
-        "G",
-        "H",
-        "J"
-    ]
+    if global_vars.format_type == "MISC":
+        codes = ["1","2","3","4","5","6","8","A","B","C","D","E","F","G"]
+    elif global_vars.format_type == "NEC":
+        codes = ["1","4"]
+
     totals = [0 for _ in range(len(codes))]
     payer_code_string = ""
 
