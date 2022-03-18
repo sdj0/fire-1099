@@ -35,7 +35,7 @@
             "payee_city": "MOON",
             "payee_state": "CA",
             "payee_zip_code": "22222",
-            "payment_amount_3": "10000"
+            "payment_amount_1": "10000"
         },
         {
             "payment_year": "2021",
@@ -46,7 +46,7 @@
             "payee_city": "BLOBVILLE",
             "payee_state": "CA",
             "payee_zip_code": "11111",
-            "payment_amount_3": "5000"
+            "payment_amount_1": "5000"
         }
     ]
 }
