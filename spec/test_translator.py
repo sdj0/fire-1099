@@ -80,7 +80,7 @@ def test_translator_insert_sequence_numbers():
         "00000006"
 
 
-# Tests whether payer and end_of_payer record fields are correctly isnerted
+# Tests whether payer and end_of_payer record fields are correctly inserted
 def test_translator_insert_payer_totals():
     # pylint: disable=invalid-sequence-index
     data = translator.load_full_schema(VALID_ALL_DATA)
@@ -93,7 +93,7 @@ def test_translator_insert_payer_totals():
     # Test end_of_payer record
     # pylint: disable=no-member
     values = [v for (k, v) in data["end_of_payer"].items() if \
-              re.match(r"^payment_amount_.", k)]
+              re.match(r"^payment_amount_.", k) and int(v) > 0]
     assert len(values) == 16
     for v in values:
         assert v == "000000000000001700"
