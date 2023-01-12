@@ -7,7 +7,8 @@ import jsonschema
 from jsonschema import validate
 from nose.tools import raises
 
-from spec_util import check_value_too_long, check_valid_phone_num, \
+from spec_util import check_blanks, check_value_too_long, \
+                      check_valid_phone_num, \
                       check_invalid_phone_num, check_valid_tin, \
                       check_invalid_tin, check_valid_zip, check_invalid_zip, \
                       check_valid_email, check_invalid_email, \
@@ -139,6 +140,3 @@ def test_transmitter_fire_blanks_layout():
     test_string = transmitter.fire(transformed)
     for (offset_1_indexed, inclusive_bound) in TRANSMITTER_BLANK_MAP:
         yield check_blanks, test_string[(offset_1_indexed -1):inclusive_bound]
-
-def check_blanks(sub_string):
-    assert sub_string == len(sub_string)*"\x00"

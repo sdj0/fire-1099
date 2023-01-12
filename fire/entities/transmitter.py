@@ -55,7 +55,7 @@ _ITEMS = [
     ("blank_5", ("", 35, "\x00", lambda x: x)),
     ("vendor_foreign_entity_indicator", ("", 1, "\x00", uppercase)),
     ("blank_6", ("", 8, "\x00", lambda x: x)),
-    ("blank_7", ("", 2, "\x00", lambda x: x))
+    ("blank_7", ("\r\n", 2, "\x00", lambda x: x))
 ]
 
 _TRANSMITTER_SORT, _TRANSMITTER_TRANSFORMS = factor_transforms(_ITEMS)

@@ -27,7 +27,7 @@ _ITEMS = [
     ("document_indicator", ("A", 1, "\x00", lambda x: x)),
     ("foreign_entity_indicator", ("", 1, "\x00", lambda x: x)),
     ("blank_1", ("", 11, "\x00", lambda x: x)),
-    ("blank_2", ("", 2, "\x00", lambda x: x))
+    ("blank_2", ("\r\n", 2, "\x00", lambda x: x))
 ]
 
 _EXTENSION_OF_TIME_SORT, _EXTENSION_OF_TIME_TRANSFORMS = \

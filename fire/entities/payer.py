@@ -39,7 +39,7 @@ _ITEMS = [
     ("record_sequence_number",
      ("00000002", 8, "\x00", lambda x: rjust_zero(x, 8))),
     ("blank_4", ("", 241, "\x00", lambda x: x)),
-    ("blank_5", ("", 2, "\x00", lambda x: x))
+    ("blank_5", ("\r\n", 2, "\x00", lambda x: x))
 ]
 
 _PAYER_SORT, _PAYER_TRANSFORMS = factor_transforms(_ITEMS)

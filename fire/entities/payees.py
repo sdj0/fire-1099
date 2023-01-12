@@ -60,7 +60,7 @@ _ITEMS += [
     ("state_income_tax_withheld", ("", 12, "\x00", lambda x: x)),
     ("local_income_tax_withheld", ("", 12, "\x00", lambda x: x)),
     ("combined_federal_state_code", ("", 2, "\x00", lambda x: x)),
-    ("blank_8", ("", 2, "\x00", lambda x: x))
+    ("blank_8", ("\r\n", 2, "\x00", lambda x: x))
 ]
 
 _PAYEE_SORT, _PAYEE_TRANSFORMS = factor_transforms(_ITEMS)

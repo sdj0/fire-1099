@@ -5,15 +5,17 @@ required by IRS Publication 1220.
 
 Support notes:
 * 1099-MISC and 1099-NEC files only.
-* Singly payer only. For multiple payers, use multiple input files.
+* Single payer only. For multiple payers, use multiple input files.
 """
+import collections
 import os.path
 import json
 from time import gmtime, strftime
 from jsonschema import validate
+import re
 import click
 
-from fire.entities import transmitter, payer, payees, end_of_payer, end_of_transmission
+from fire.entities import transmitter, payer, payees, end_of_payer, state_totals, end_of_transmission
 from .util import SequenceGenerator
 
 
@@ -133,6 +135,7 @@ def load_full_schema(data):
         "payer": "",
         "payees": [],
         "end_of_payer": "",
+        "state_totals": [],
         "end_of_transmission": "",
     }
     merged_data["transmitter"] = transmitter.xform(data["transmitter"])
@@ -160,9 +163,43 @@ def insert_generated_values(data):
         fields captured.
 
     """
-    insert_sequence_numbers(data)
+    insert_state_total_records(data)
     insert_payer_totals(data)
+    insert_sequence_numbers(data)
     insert_transmitter_totals(data)
+
+
+def get_state_codes(data):
+    """
+    Return a set of state codes used in the data set.
+
+    Parameters
+    ----------
+    data : dict
+        Dictionary containing "master" set of records. It is expected that
+        this includes end_of_payer and end_of_transmission records, with all
+        fields captured.
+
+    """
+    state_codes = set()
+    for payee in data["payees"]:
+        s = payee.get("combined_federal_state_code", "")
+        if re.match(r'[0-9]{2}', s):
+            state_codes.add(s)
+    return state_codes
+
+
+def insert_state_total_records(data):
+    """
+    Insert records for state_totals based on number of payees which have
+    consolidated reporting
+    """
+    states = get_state_codes(data)
+    for s in states:
+        data["state_totals"].append(state_totals.xform({
+            "combined_federal_state_code": s,
+        }))
+
 
 
 def insert_sequence_numbers(data):
@@ -187,12 +224,14 @@ def insert_sequence_numbers(data):
     for payee in data["payees"]:
         payee["record_sequence_number"] = seq.get_next()
     data["end_of_payer"]["record_sequence_number"] = seq.get_next()
+    for state_total in data["state_totals"]:
+        state_total["record_sequence_number"] = seq.get_next()
     data["end_of_transmission"]["record_sequence_number"] = seq.get_next()
 
 
 def insert_payer_totals(data):
     """
-    Inserts requried values into the payer and end_of_payer records. This
+    Inserts required values into the payer and end_of_payer records. This
     includes values for the following fields: payment_amount_*,
     amount_codes, number_of_payees, total_number_of_payees, number_of_a_records.
 
@@ -225,20 +264,52 @@ def insert_payer_totals(data):
         "H",
         "J"
     ]
-    totals = [0 for _ in range(len(codes))]
+    wh_codes = ["state_income_tax_withheld_total", "local_income_tax_withheld_total"]
+
+    totals = collections.Counter()
+    by_state = {}
+    state_codes = get_state_codes(data)
+    for state in get_state_codes(data):
+        sd = collections.Counter()
+        by_state[state] = sd
+        sd["number_of_payees"] = 0
+        for k in codes + wh_codes:
+            sd[k] = 0
     payer_code_string = ""
 
     for payee in data["payees"]:
-        for i, code in enumerate(codes):
+        sd = by_state.get(payee.get("combined_federal_state_code", ""))
+        if sd:
+            sd["number_of_payees"] += 1
+            for wh in ["state_income_tax_withheld", "local_income_tax_withheld"]:
+                try:
+                    sd[wh] += int(payee.get(wh, 0))
+                except ValueError:
+                    pass
+
+        for code in codes:
             try:
-                totals[i] += int(payee["payment_amount_" + code])
+                amount = int(payee["payment_amount_" + code])
+                totals[code] += amount
+                if sd:
+                    sd[code] += amount
             except ValueError:
                 pass
 
-    for i, (total, code) in enumerate(zip(totals, codes)):
+    for code in codes:
+        total = totals[code]
         if total != 0:
             payer_code_string += code
             data["end_of_payer"]["payment_amount_" + code] = f"{total:0>18}"
+
+    for st_data in data["state_totals"]:
+        state_code = st_data["combined_federal_state_code"]
+        sd = by_state[state_code]
+        st_data["number_of_payees"] = f"{sd['number_of_payees']:0>8}"
+        for code in codes:
+            st_data["control_total_" + code] = f"{sd[code]:0>12}"
+        for wh in wh_codes:
+            st_data[wh] = f"{sd[code]:0>18}"
 
     data["payer"]["amount_codes"] = str(payer_code_string)
     payee_count = len(data["payees"])
@@ -248,7 +319,7 @@ def insert_payer_totals(data):
 
 def insert_transmitter_totals(data):
     """
-    Inserts requried values into the transmitter and end_of_transmission
+    Inserts required values into the transmitter and end_of_transmission
     records. This includes values for the following fields:
     total_number_of_payees, number_of_a_records.
 
@@ -277,6 +348,7 @@ def get_fire_format(data):
     * payer (dict)
     * payees (array of dict objects)
     * end_of_payer (dict)
+    * state_totals (optional dict if payer[combined_state_fed])
     * end_of_transmission
 
     Parameters
@@ -297,6 +369,7 @@ def get_fire_format(data):
     fire_string += payer.fire(data["payer"])
     fire_string += payees.fire(data["payees"])
     fire_string += end_of_payer.fire(data["end_of_payer"])
+    fire_string += state_totals.fire(data["state_totals"])
     fire_string += end_of_transmission.fire(data["end_of_transmission"])
 
     return fire_string

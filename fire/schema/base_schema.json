@@ -146,6 +146,35 @@
                 "record_sequence_number": {"type": "string", "maxLength": 8}
             } 
         },
+        "state_totals":{
+            "type": "object",
+            "properties": {
+                "record_type": {"type": "string", "maxLength": 1},
+                "number_of_payees": {"type": "string", "maxLength": 8},
+                "control_total_1": {"$ref": "#/definitions/dollar_amount"},
+                "control_total_2": {"$ref": "#/definitions/dollar_amount"},
+                "control_total_3": {"$ref": "#/definitions/dollar_amount"},
+                "control_total_4": {"$ref": "#/definitions/dollar_amount"},
+                "control_total_5": {"$ref": "#/definitions/dollar_amount"},
+                "control_total_6": {"$ref": "#/definitions/dollar_amount"},
+                "control_total_7": {"$ref": "#/definitions/dollar_amount"},
+                "control_total_8": {"$ref": "#/definitions/dollar_amount"},
+                "control_total_9": {"$ref": "#/definitions/dollar_amount"},
+                "control_total_A": {"$ref": "#/definitions/dollar_amount"},
+                "control_total_B": {"$ref": "#/definitions/dollar_amount"},
+                "control_total_C": {"$ref": "#/definitions/dollar_amount"},
+                "control_total_D": {"$ref": "#/definitions/dollar_amount"},
+                "control_total_E": {"$ref": "#/definitions/dollar_amount"},
+                "control_total_F": {"$ref": "#/definitions/dollar_amount"},
+                "control_total_G": {"$ref": "#/definitions/dollar_amount"},
+                "control_total_H": {"$ref": "#/definitions/dollar_amount"},
+                "control_total_J": {"$ref": "#/definitions/dollar_amount"},
+                "record_sequence_number": {"type": "string", "maxLength": 8},
+                "state_income_tax_withheld_total": {"type": "string", "maxLength": 12},
+                "local_income_tax_withheld_total": {"type": "string", "maxLength": 12},
+                "combined_federal_state_code": {"type": "string", "maxLength": 2}
+            }
+        },
         "end_of_transmission":{
             "type": "object",
             "properties":{

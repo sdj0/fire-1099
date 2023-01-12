@@ -25,7 +25,7 @@ _ITEMS = [
     ("blank_2", ("", 442, "\x00", lambda x: x)),
     ("record_sequence_number", ("", 8, "0", lambda x: x)),
     ("blank_3", ("", 241, "\x00", lambda x: x)),
-    ("blank_4", ("", 2, "\x00", lambda x: x))
+    ("blank_4", ("\r\n", 2, "\x00", lambda x: x))
 ]
 
 _END_OF_TRANSMISSION_SORT, _END_OF_TRANSMISSION_TRANSFORMS = \
