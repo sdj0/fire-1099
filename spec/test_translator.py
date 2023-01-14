@@ -136,3 +136,19 @@ def test_translator_get_fire_format():
 
     for (offset, inclusive_bound) in END_OF_TRANSMISSION_BLANK_MAP:
         yield check_blanks, ascii_string[(offset + 749*5):inclusive_bound]
+
+def test_translator_insert_state_totals():
+    """A schema with a state / federal consolidated field should generate a state_totals record."""
+    data = translator.load_full_schema(VALID_ALL_DATA)
+    data["payees"][0]["combined_federal_state_code"] = "06"
+    translator.insert_state_total_records(data)
+
+    assert len(data["state_totals"]) == 1
+
+def test_insert_payer_totals():
+    data = translator.load_full_schema(VALID_ALL_DATA)
+    data["payees"][0]["combined_federal_state_code"] = "06"
+    data["payees"][1]["combined_federal_state_code"] = "06"
+    translator.insert_generated_values(data)
+    assert int(data["state_totals"][0]["control_total_1"]) == 1700
+

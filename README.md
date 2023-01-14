@@ -67,6 +67,13 @@ A few things need to happen before you can submit an output file to the IRS:
 * You need a *Transmitter Control Code* or "TCC." This is done by filing From 4419 electronically (https://fire.irs.gov). It can take 45 days to get a response.
 * You need to have a valid business tax identification code (EIN/TIN). This will be linked to your TCC, and is what you'll use for the "transmitter" record in your FIRE submissions.
 
+# Running tests
+
+To run this module's tests, `pip install nose` and then invoke nosetests.
+```bash
+$  nosetests spec/test*.py
+```
+
 # Future Work
 * Add support for "Extension of Time" requests
 * Add support for filings other than 1099-MISC and 1099-NEC

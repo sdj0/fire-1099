@@ -33,7 +33,7 @@ _ITEMS += [
     ("blank_2", ("", 160, "\x00", lambda x: x)),
     ("record_sequence_number", ("", 8, "0", lambda x: x)),
     ("blank_3", ("", 241, "\x00", lambda x: x)),
-    ("blank_4", ("\r\n", 2, "\x00", lambda x: x))
+    ("blank_4", ("\x0a\x0a", 2, "\x00", lambda x: x))
 ]
 
 _END_OF_PAYER_SORT, _END_OF_PAYER_TRANSFORMS = factor_transforms(_ITEMS)

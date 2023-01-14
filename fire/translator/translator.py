@@ -201,7 +201,6 @@ def insert_state_total_records(data):
         }))
 
 
-
 def insert_sequence_numbers(data):
     """
     Inserts sequence numbers into each record, in the following order:
@@ -307,7 +306,7 @@ def insert_payer_totals(data):
         sd = by_state[state_code]
         st_data["number_of_payees"] = f"{sd['number_of_payees']:0>8}"
         for code in codes:
-            st_data["control_total_" + code] = f"{sd[code]:0>12}"
+            st_data["control_total_" + code] = f"{sd[code]:0>18}"
         for wh in wh_codes:
             st_data[wh] = f"{sd[code]:0>18}"
 

@@ -37,7 +37,7 @@ _ITEMS += [
     ("local_income_tax_withheld_total", ("", 18, "\x00", lambda x: x)),
     ("blank_4", ("", 4, "\x00", lambda x: x)),
     ("combined_federal_state_code", ("", 2, "\x00", lambda x: x)),
-    ("blank_5", ("\r\n", 2, "\x00", lambda x: x)),
+    ("blank_5", ("\x0a\x0a", 2, "\x0a", lambda x: x)),
 ]
 
 _STATE_TOTALS_SORT, _STATE_TOTALS_TRANSFORMS = factor_transforms(_ITEMS)
