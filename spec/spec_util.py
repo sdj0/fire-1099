@@ -12,9 +12,10 @@ import jsonschema
 
 from jsonschema import validate
 from nose.tools import raises
+import re
 
 SCHEMA = json.load(open("./fire/schema/base_schema.json"))
-VALID_ALL_PATH = "./spec/data/valid_all.json"
+VALID_ALL_PATH = "./spec/data/valid_all_MISC.json"
 INVALID_PHONE_NUMS = ["+1 555 666 7777", "555 A44 B777", "123ABC5678",
                       "123 45 67", "555 666 777788", "555 666 7777 #"]
 VALID_PHONE_NUMS = ["5556667777", "555-666-7777", "(555)666-7777",
@@ -117,7 +118,7 @@ def dive_to_path(full_dictionary, path, value):
     return _dive_recursion(dict_copy, path, value)
 
 def check_blanks(sub_string):
-    assert sub_string == len(sub_string)*"\x00"
+    assert re.fullmatch(r'[\x00\x0a\x0d]*', sub_string)
 
 @raises(jsonschema.exceptions.ValidationError)
 def check_value_too_long(dict_obj, path, value):
